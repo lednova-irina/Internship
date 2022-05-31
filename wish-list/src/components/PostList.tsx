@@ -1,11 +1,20 @@
-import React, { FC } from "react";
-import PostItem from "./PostItem"
+import React, { FC, useContext, useState } from "react";
+import { PostsContext } from "../contexts/PostsContex";
+import { PostModel } from "../models/PostModel";
+import PostItem from "./PostItem";
 
- const PostList: FC = () => {
+
+
+const PostList: FC = () => {
+  const { posts } = useContext(PostsContext);
+
   return (
     <div className="post-list">
-      <PostItem></PostItem>
+      
+      {posts.map((post) => (
+        <PostItem key={post.key} post={post} />
+      ))}
     </div>
   );
 };
-export default PostList
+export default PostList;

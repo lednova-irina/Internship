@@ -1,19 +1,23 @@
-import React, { FC } from "react";
-import InputForm from "./components/InputForm";
+import { FC, useContext, useState } from "react";
+import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
-import { useState } from "react";
-
+import { PostsContext } from "./contexts/PostsContex";
+import { PostModel } from "./models/PostModel";
 
 const App: FC = () => {
-  const [inputText, setInputText] = useState("");
-  const [task, setTask] = useState("");
+  const [posts, setPosts] = useState(new Array<PostModel>());
+  const state = { posts, setPosts };
 
   return (
-    <div>
-      <div className="Title">Wish list</div>
-      <InputForm />
-      <PostList />
-    </div>
+    <PostsContext.Provider
+      value={{ posts: state.posts, setPosts: state.setPosts }}
+    >
+      <div className="wish-list">
+        <div className="title">Wish list</div>
+        <PostForm />
+        <PostList />
+      </div>
+    </PostsContext.Provider>
   );
 };
 
