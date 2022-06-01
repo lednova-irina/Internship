@@ -1,5 +1,7 @@
 export interface PostModel{
-    postNumber: number;
-    description: string | undefined;
-    key: any;
+    id: string;
+    title: string;
+    link?: string;
+    price?: number
+    description?: string;
 }

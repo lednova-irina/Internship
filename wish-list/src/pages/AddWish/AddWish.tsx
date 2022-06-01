@@ -3,11 +3,7 @@ import { useState } from "react";
 import { PostsContext } from "../contexts/PostsContex";
 import { PostModel } from "../models/PostModel";
 
-type Props = {
-  // addNewPost: (text: string) => void;
-};
-
-const PostForm: FC<Props> = (props) => {
+const PostForm: FC = () => {
   const { posts, setPosts } = useContext(PostsContext);
   const [inputText, setInputText] = useState("");
 
@@ -20,10 +16,12 @@ const PostForm: FC<Props> = (props) => {
     setPosts([...posts, newPost]);
     setInputText("");
   };
+      {/*onFormSubmit console log data*/}
 
-  return (
-    // <PostsContext.Consumer>
-    //   {({ setPost }) => (
+
+  return (     
+     {/*react hook form with validation*/}
+
     <form className="input-form">
       <input
         value={inputText}
@@ -31,6 +29,10 @@ const PostForm: FC<Props> = (props) => {
         type="text"
         placeholder="type a wish"
       />
+      {/*name* text/}
+      {/*url* text/}
+      {/*price* number with precition/}
+      {/*description textarea*/}
       <button
         type="submit"
         onClick={(e) => {
@@ -41,8 +43,6 @@ const PostForm: FC<Props> = (props) => {
         Add
       </button>
     </form>
-    //   )}
-    // </PostsContext.Consumer>
   );
 };
 export default PostForm;
