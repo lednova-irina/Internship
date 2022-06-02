@@ -2,42 +2,56 @@ import React, { FC } from "react";
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { WishModel } from "../../models/WishModel";
-import MyInput from "../../UI/MyInput";
-import { Button, FormControl } from "@mui/material";
-import { color } from "@mui/system";
+import { Button, FormControl, MenuItem } from "@mui/material";
+import { TextField } from "@mui/material";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+import { WishService } from "../../services/WishService";
+
+const schema = yup
+  .object()
+  .shape({
+    title: yup.string().required("Fill this field"),
+    //  .matches(/^[а-яА-ЯёЁa-zA-Z0-9]+$/, { message: "Use valid characters" }),
+    description: yup.string().required("Fill this field"),
+    link: yup.string().url(),
+    price: yup.number().positive("Use only positive price"),
+    currency: yup.string(),
+  })
+  .required();
+
+const currencies = [
+  {
+    value: "USD",
+    label: "$",
+  },
+  {
+    value: "EUR",
+    label: "€",
+  },
+  {
+    value: "UAH",
+    label: "₴",
+  },
+];
 
 const WishForm: FC = (props) => {
-  // const [wishes, setWish] = useState();
-  // const [inputText, setInputText] = useState("");
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<WishModel>();
+  } = useForm<WishModel>({
+    resolver: yupResolver(schema),
+  });
+  const [currency, setCurrency] = useState("");
 
   const onSubmit: SubmitHandler<WishModel> = (data) => {
-    console.log(errors);
+    WishService.addWish(data);
+    console.log(data);
   };
-  // const addNewPost = () => {
-  //   const newWish: WishModel = {
-  //     id: Date.now().toString(),
-  //     title: string;
-  //     description: inputText,
-  //     link: string;
-  //     price: number;
-
-  //     };
-  //   setWish([...wishes, newWish]);
-  //   setInputText("");
-  // };
-
-  // const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-  //   setInputText(e.target.value);
-
-  // const onClick: React.ReactEventHandler = (e) => {
-  //   e.preventDefault();
-  //    addNewPost();
-  // };
+  const handleChangeCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCurrency(event.target.value);
+  };
 
   return (
     <FormControl
@@ -45,7 +59,7 @@ const WishForm: FC = (props) => {
         "& .MuiTextField-root": {
           background: "#F2F2EB",
           opacity: "0.8",
-          borderRadius: "10px",
+          borderRadius: "5px",
         },
       }}
       component="form"
@@ -53,55 +67,87 @@ const WishForm: FC = (props) => {
       className="input-fields"
       onSubmit={handleSubmit(onSubmit)}
     >
-      <MyInput
-        {...register("title", { pattern: /^[а-яА-ЯёЁa-zA-Z0-9]+$/ })}
-        // onChange={onChange}
+      <TextField
+        {...register("title")}
         error={!!errors.title}
-        label="Title"
-        required
-        type="text"
+        helperText={errors.title?.message}
+        label="Title*"
         placeholder="type wish title"
+        margin="dense"
+        variant="outlined"
       />
 
-      <MyInput
+      <TextField
         {...register("description", { pattern: /^[а-яА-ЯёЁa-zA-Z0-9]+$/ })}
-        // onChange={onChange}
-
         multiline
         error={!!errors.description}
-        label="Description"
-        required
-        type="text"
+        helperText={errors.description?.message}
+        label="Description*"
         placeholder="type wish description"
+        margin="dense"
+        variant="outlined"
       />
 
-      <MyInput
-        {...register("link", {
-          pattern:
-            /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/,
-        })}
-        // onChange={onChange}
+      <TextField
+        {...register("link")}
         label="Link"
-        type="text"
         placeholder="add wish link"
+        margin="dense"
+        variant="outlined"
       />
 
-      <MyInput
-        {...register("price", { pattern: /\-?\d+(\.\d{0,})?/ })}
-        // onChange={onChange}
+      <TextField
+        {...register("price")}
+        error={!!errors.price}
+        helperText={errors.price?.message}
         label="Price"
-        type="text"
         placeholder="add wish price"
+        margin="dense"
+        variant="outlined"
       />
-
-      <Button
-        type="submit"
-        variant="contained"
-        // onClick={onClick}
+      <TextField
+        type="file"
+        {...register("currency")}
+        select
+        label="Currency"
+        value={currency}
+        onChange={handleChangeCurrency}
+        margin="dense"
       >
+        {currencies.map((option) => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </TextField>
+
+      <Button className="button-submit" type="submit" variant="contained">
         Add
       </Button>
     </FormControl>
   );
 };
 export default WishForm;
+
+// const [wishes, setWish] = useState();
+// const [inputText, setInputText] = useState("");
+// const addNewPost = () => {
+//   const newWish: WishModel = {
+//     id: Date.now().toString(),
+//     title: string;
+//     description: inputText,
+//     link: string;
+//     price: number;
+
+//     };
+//   setWish([...wishes, newWish]);
+//   setInputText("");
+// };
+
+// const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
+//   setInputText(e.target.value);
+
+// const onClick: React.ReactEventHandler = (e) => {
+//   e.preventDefault();
+//    addNewPost();
+// };

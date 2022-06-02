@@ -27,21 +27,24 @@
   font-size: 45px;
   font-weight: 900;
 }
-.input-form,
+/* .input-form,
 .post-list {
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
   width: 100%;
+} */
+.input-fields{
+  width: 60%;
 }
-
 .post-item {
   display: flex;
   justify-content: center;
   width: 100%;
 }
 
-button {
+.button-submit {
+  margin-top: 20px;
   font-family: inherit;
   font-weight: 300;
 }
