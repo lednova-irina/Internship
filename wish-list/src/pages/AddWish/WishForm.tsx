@@ -1,12 +1,19 @@
 import React, { FC } from "react";
 import { useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { WishModel } from "../../models/WishModel";
-import { Button, FormControl, MenuItem } from "@mui/material";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+} from "@mui/material";
 import { TextField } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
-import { WishService } from "../../services/WishService";
+import { StoreService } from "../../services/StoreService";
 
 const schema = yup
   .object()
@@ -19,39 +26,27 @@ const schema = yup
     currency: yup.string(),
   })
   .required();
-
-const currencies = [
-  {
-    value: "USD",
-    label: "$",
-  },
-  {
-    value: "EUR",
-    label: "€",
-  },
-  {
-    value: "UAH",
-    label: "₴",
-  },
-];
-
-const WishForm: FC = (props) => {
+type Props = {
+  model?: WishModel;
+};
+const WishForm: FC<Props> = (props) => {
   const {
     register,
     handleSubmit,
+    control,
+    reset,
     formState: { errors },
   } = useForm<WishModel>({
     resolver: yupResolver(schema),
   });
-  const [currency, setCurrency] = useState("");
 
   const onSubmit: SubmitHandler<WishModel> = (data) => {
-    WishService.addWish(data);
-    console.log(data);
+    StoreService.addWish(data);
+    reset();
   };
-  const handleChangeCurrency = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCurrency(event.target.value);
-  };
+  // const handleChangeCurrency = (event: SelectChangeEvent) => {
+  //   setCurrency(event.target.value);
+  // };
 
   return (
     <FormControl
@@ -67,6 +62,7 @@ const WishForm: FC = (props) => {
       className="input-fields"
       onSubmit={handleSubmit(onSubmit)}
     >
+      <h1 className="title">Wish list</h1>
       <TextField
         {...register("title")}
         error={!!errors.title}
@@ -105,21 +101,33 @@ const WishForm: FC = (props) => {
         margin="dense"
         variant="outlined"
       />
-      <TextField
-        type="file"
-        {...register("currency")}
-        select
-        label="Currency"
-        value={currency}
-        onChange={handleChangeCurrency}
-        margin="dense"
-      >
-        {currencies.map((option) => (
-          <MenuItem key={option.value} value={option.value}>
-            {option.label}
-          </MenuItem>
-        ))}
-      </TextField>
+      <FormControl fullWidth margin="dense">
+        <InputLabel>Currency</InputLabel>
+        <Controller
+          render={({ field }) => (
+            <Select label="Currency" {...field}>
+              <MenuItem value={"USD"}>$</MenuItem>
+              <MenuItem value={"EUR"}>€</MenuItem>
+              <MenuItem value={"UAH"}>₴</MenuItem>
+            </Select>
+          )}
+          control={control}
+          name="currency"
+          defaultValue={""}
+        />
+      </FormControl>
+      {/* <FormControl fullWidth margin="dense">
+        <InputLabel>Currency</InputLabel>
+        <Select
+          value={currency}
+          label="Currency"
+          onChange={handleChangeCurrency}
+        >
+          <MenuItem value={"USD"}>$</MenuItem>
+          <MenuItem value={"EUR"}>€</MenuItem>
+          <MenuItem value={"UAH"}>₴</MenuItem>
+        </Select>
+      </FormControl> */}
 
       <Button className="button-submit" type="submit" variant="contained">
         Add
@@ -128,26 +136,3 @@ const WishForm: FC = (props) => {
   );
 };
 export default WishForm;
-
-// const [wishes, setWish] = useState();
-// const [inputText, setInputText] = useState("");
-// const addNewPost = () => {
-//   const newWish: WishModel = {
-//     id: Date.now().toString(),
-//     title: string;
-//     description: inputText,
-//     link: string;
-//     price: number;
-
-//     };
-//   setWish([...wishes, newWish]);
-//   setInputText("");
-// };
-
-// const onChange: React.ChangeEventHandler<HTMLInputElement> = (e) =>
-//   setInputText(e.target.value);
-
-// const onClick: React.ReactEventHandler = (e) => {
-//   e.preventDefault();
-//    addNewPost();
-// };

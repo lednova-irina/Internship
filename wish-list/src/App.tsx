@@ -1,13 +1,11 @@
 import { FC } from "react";
 import WishForm from "./pages/AddWish/WishForm";
 import WishList from "./pages/WishList/WishList";
-import { WishModel } from "./models/WishModel";
+import Navbar from "./pages/Navbar";
 
 const App: FC = () => {
   return (
     <div className="wish-list">
-      <div className="title">Wish list</div>
-      <WishForm />
       <WishList />
     </div>
   );
