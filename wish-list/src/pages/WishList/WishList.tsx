@@ -2,12 +2,7 @@ import React, { FC, useState } from "react";
 import { WishModel } from "../../models/WishModel";
 import WishItem from "./WishItem";
 
-const WishList: FC = (props) => {
-  // const postMethods = {
-  //   postDelete: () => {},
-  //   postEdit: () => {},
-  //   postDone: () => {},
-  // };
+const WishList: FC = () => {
 
   return (
     <div className="wish-list">
