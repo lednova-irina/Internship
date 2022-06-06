@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useState } from "react";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { WishModel } from "../../models/WishModel";
 import {
   Button,
@@ -8,12 +8,13 @@ import {
   InputLabel,
   MenuItem,
   Select,
-  SelectChangeEvent,
 } from "@mui/material";
 import { TextField } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { StoreService } from "../../services/StoreService";
+import { useMutation } from "react-query";
+import { useNavigate, useParams } from "react-router-dom";
 
 const schema = yup
   .object()
@@ -29,21 +30,59 @@ const schema = yup
 type Props = {
   model?: WishModel;
 };
+type RouteParams = {
+  id: string;
+};
+
 const WishForm: FC<Props> = (props) => {
+  const { id } = useParams<RouteParams>();
+  const navigator = useNavigate();
+  let model = { title: "" } as WishModel;
+  if (id) {
+    model = StoreService.getWish(id) || model;
+  }
   const {
     register,
     handleSubmit,
     control,
-    reset,
     formState: { errors },
   } = useForm<WishModel>({
     resolver: yupResolver(schema),
+    defaultValues: model,
   });
 
-  const onSubmit: SubmitHandler<WishModel> = (data) => {
-    StoreService.addWish(data);
-    reset();
+  const addMutation = useMutation(
+    StoreService.storeKey,
+    (data: WishModel) => {
+      if (id) {
+        data.id = id;
+        StoreService.editWish(data);
+      } else {
+        StoreService.addWish(data);
+      }
+      return Promise.resolve();
+    },
+    {
+      onSuccess: () => {
+        navigator("/wish-list");
+      },
+      onError: (error: any) => {
+        alert(error.message);
+      },
+    }
+  );
+  const createWish = (
+    model: WishModel,
+    e: React.BaseSyntheticEvent | undefined
+  ) => {
+    e && e.preventDefault();
+    addMutation.mutate(model);
   };
+
+  // const onSubmit: SubmitHandler<WishModel> = (data) => {
+  //   StoreService.addWish(data);
+  //   reset();
+  // };
   // const handleChangeCurrency = (event: SelectChangeEvent) => {
   //   setCurrency(event.target.value);
   // };
@@ -60,7 +99,7 @@ const WishForm: FC<Props> = (props) => {
       component="form"
       autoComplete="off"
       className="input-fields"
-      onSubmit={handleSubmit(onSubmit)}
+      onSubmit={handleSubmit(createWish)}
     >
       <h1 className="title">Wish list</h1>
       <TextField

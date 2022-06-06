@@ -1,12 +1,13 @@
 import { WishModel } from "../models/WishModel";
-const storeKey = "WishesStore";
+// const storeKey = "WishesStore";
 export const StoreService = {
+  storeKey: "WishesStore",
   getStore: (): Array<WishModel> =>
-    localStorage.getItem(storeKey)
-      ? JSON.parse(localStorage.getItem(storeKey) as string)
+    localStorage.getItem(StoreService.storeKey)
+      ? JSON.parse(localStorage.getItem(StoreService.storeKey) as string)
       : new Array<WishModel>(),
   setStorage: (store: Array<WishModel>) =>
-    localStorage.setItem(storeKey, JSON.stringify(store)),
+    localStorage.setItem(StoreService.storeKey, JSON.stringify(store)),
 
   addWish: (value: WishModel) => {
     const store = StoreService.getStore();

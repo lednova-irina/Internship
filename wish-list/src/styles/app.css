@@ -17,10 +17,11 @@
   background: #53736A;
 }
 .wish-list {
-  width: 80%;
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
+  
 }
 .title {
   margin: 20px 0;
@@ -43,6 +44,7 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  flex: 33% 1 1;
 }
 
 .button-submit {
