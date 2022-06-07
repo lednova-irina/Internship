@@ -1,5 +1,5 @@
 import React, { FC } from "react";
-import { useMutation } from "react-query";
+import { QueryClient, useMutation, useQueryClient } from "react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { WishModel } from "../../models/WishModel";
 import { StoreService } from "../../services/StoreService";
@@ -13,6 +13,8 @@ const WishItem: FC<Props> = (props) => {
     post: { id, title, link, price, description, currency },
   } = props;
 
+  const queryClient = useQueryClient();
+
   const deleteMutation = useMutation(
     (id: string | undefined) => {
       if (id) {
@@ -23,6 +25,9 @@ const WishItem: FC<Props> = (props) => {
     {
       onError: (error: any) => {
         alert(error.message);
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries();
       },
     }
   );
