@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { useMutation } from "react-query";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { WishModel } from "../../models/WishModel";
 import { StoreService } from "../../services/StoreService";
 
@@ -13,16 +13,11 @@ const WishItem: FC<Props> = (props) => {
     post: { id, title, link, price, description, currency },
   } = props;
 
-  const navigator = useNavigate();
-  const editWish = (e: React.BaseSyntheticEvent | undefined) => {
-    e && e.preventDefault();
-    navigator(`/add-wish/${id}`);
-  };
-
   const deleteMutation = useMutation(
-    StoreService.storeKey,
-    (id: string) => {
-      StoreService.deleteWish(id);
+    (id: string | undefined) => {
+      if (id) {
+        StoreService.deleteWish(id);
+      }
       return Promise.resolve();
     },
     {
@@ -31,16 +26,6 @@ const WishItem: FC<Props> = (props) => {
       },
     }
   );
-  const deleteWish = (e: React.BaseSyntheticEvent | undefined) => {
-    e && e.preventDefault();
-    deleteMutation.mutate(id);
-  };
-  // const editWish: React.ReactEventHandler = () => {
-  //   StoreService.editWish(props.post);
-  // };
-  // const deleteWish: React.ReactEventHandler = () => {
-  //   StoreService.deleteWish(id);
-  // };
 
   return (
     <div className="post-item">
@@ -52,12 +37,14 @@ const WishItem: FC<Props> = (props) => {
           {price} {currency}
         </li>
       </ul>
-
-      <button onClick={editWish} className="post-item__edit">
-        Edit
+      <button className="post-item__edit">
+        <Link to={`/edit-wish/${id}`}> Edit</Link>
       </button>
       <button className="post-item__done">Done</button>
-      <button onClick={deleteWish} className="post-item__delete">
+      <button
+        onClick={() => deleteMutation.mutate(id)}
+        className="post-item__delete"
+      >
         Delete
       </button>
     </div>
