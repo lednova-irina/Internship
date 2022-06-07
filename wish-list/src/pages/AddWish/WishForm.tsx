@@ -13,7 +13,7 @@ import { TextField } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { StoreService } from "../../services/StoreService";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 
 const schema = yup
@@ -40,7 +40,14 @@ const schema = yup
       .transform((value: string, originalValue: string) =>
         originalValue.trim() === "" ? null : value
       ),
-    currency: yup.string(),
+    // .when("currency", {
+    //   is: "",
+    //   then: yup.number().required("Price is required"),
+    // }),
+    currency: yup.string().when("price", {
+      is: (price: number) => !!price,
+      then: yup.string().required("Fill this field"),
+    }),
   })
   .required();
 type Props = {
@@ -53,6 +60,7 @@ type RouteParams = {
 const WishForm: FC<Props> = (props) => {
   const { id } = useParams<RouteParams>();
   const navigator = useNavigate();
+  const queryClient = useQueryClient();
   let model = {} as WishModel;
   if (id) {
     model = StoreService.getWish(id) || model;
@@ -77,6 +85,7 @@ const WishForm: FC<Props> = (props) => {
     {
       onSuccess: () => {
         navigator("/wish-list");
+        queryClient.invalidateQueries();
       },
       onError: (error: any) => {
         alert(error.message);
@@ -143,7 +152,13 @@ const WishForm: FC<Props> = (props) => {
         <InputLabel>Currency</InputLabel>
         <Controller
           render={({ field }) => (
-            <Select className="input-form__select" label="Currency" {...field}>
+            <Select
+              className="input-form__select"
+              label="Currency"
+              {...field}
+              error={!!errors.link}
+              // как вывести текст ошибки?  helperText={errors.link?.message}
+            >
               <MenuItem value={"USD"}>$</MenuItem>
               <MenuItem value={"EUR"}>€</MenuItem>
               <MenuItem value={"UAH"}>₴</MenuItem>
