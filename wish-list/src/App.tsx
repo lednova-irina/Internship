@@ -21,7 +21,7 @@ const App: FC = () => {
           <Route path="/" element={<WishList />}></Route>
           <Route path="/wish-list" element={<WishList />}></Route>
           <Route path="/add-wish" element={<WishForm />}></Route>
-          <Route path="/add-wish/:id" element={<WishForm />}></Route>
+          <Route path="/edit-wish/:id" element={<WishForm />}></Route>
           <Route path="/archive" element={<WishArchive />}></Route>
           <Route path="*" element={<NoPage />}></Route>
         </Routes>
