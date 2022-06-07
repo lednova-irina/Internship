@@ -1,9 +1,18 @@
 import React, { FC, useState } from "react";
-import { useStorage } from "../../hooks/useStorage";
+import { useQuery } from "react-query";
+import { StoreService } from "../../services/StoreService";
 import WishItem from "./WishItem";
 
 const WishList: FC = () => {
- const{isLoading, posts}= useStorage()
+  const { isLoading, data, error } = useQuery(
+    "wishes",
+    () => StoreService.getStore(),
+    {
+      onError: (error: any) => {
+        alert(error.message);
+      },
+    }
+  );
 
   return (
     <div className="wish-list">
@@ -12,7 +21,7 @@ const WishList: FC = () => {
         <div>Loading...</div>
       ) : (
         <div className="wish-list">
-          {posts && posts.map((post) => <WishItem key={post.id} post={post} />)}
+          {data && data.map((wish) => <WishItem key={wish.id} post={wish} />)}
         </div>
       )}
     </div>
