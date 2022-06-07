@@ -19,11 +19,27 @@ import { useNavigate, useParams } from "react-router-dom";
 const schema = yup
   .object()
   .shape({
-    title: yup.string().required("Fill this field"),
-    //  .matches(/^[а-яА-ЯёЁa-zA-Z0-9]+$/, { message: "Use valid characters" }),
-    description: yup.string().required("Fill this field"),
-    link: yup.string().url(),
-    price: yup.number().positive("Use only positive price"),
+    title: yup
+      .string()
+      .required("Fill this field")
+      .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,99}[a-z0-9]$/i, {
+        message: "Use valid characters",
+      }),
+    description: yup
+      .string()
+      .required("Fill this field")
+      .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,300}[a-z0-9]$/i, {
+        message: "Use valid characters",
+      }),
+    link: yup.string().url("Use only url"),
+    price: yup
+      .number()
+      .typeError("Use only numbers")
+      .positive("Use only positive price")
+      .nullable()
+      .transform((value: string, originalValue: string) =>
+        originalValue.trim() === "" ? null : value
+      ),
     currency: yup.string(),
   })
   .required();
@@ -37,7 +53,7 @@ type RouteParams = {
 const WishForm: FC<Props> = (props) => {
   const { id } = useParams<RouteParams>();
   const navigator = useNavigate();
-  let model = { title: "" } as WishModel;
+  let model = {} as WishModel;
   if (id) {
     model = StoreService.getWish(id) || model;
   }
@@ -52,14 +68,10 @@ const WishForm: FC<Props> = (props) => {
   });
 
   const addMutation = useMutation(
-    StoreService.storeKey,
     (data: WishModel) => {
-      if (id) {
-        data.id = id;
-        StoreService.editWish(data);
-      } else {
-        StoreService.addWish(data);
-      }
+      data.id = id;
+      StoreService.addOrEdit(data);
+
       return Promise.resolve();
     },
     {
@@ -71,21 +83,6 @@ const WishForm: FC<Props> = (props) => {
       },
     }
   );
-  const createWish = (
-    model: WishModel,
-    e: React.BaseSyntheticEvent | undefined
-  ) => {
-    e && e.preventDefault();
-    addMutation.mutate(model);
-  };
-
-  // const onSubmit: SubmitHandler<WishModel> = (data) => {
-  //   StoreService.addWish(data);
-  //   reset();
-  // };
-  // const handleChangeCurrency = (event: SelectChangeEvent) => {
-  //   setCurrency(event.target.value);
-  // };
 
   return (
     <FormControl
@@ -99,7 +96,7 @@ const WishForm: FC<Props> = (props) => {
       component="form"
       autoComplete="off"
       className="input-fields"
-      onSubmit={handleSubmit(createWish)}
+      onSubmit={handleSubmit((model: WishModel) => addMutation.mutate(model))}
     >
       <h1 className="title">Wish list</h1>
       <TextField
@@ -113,7 +110,7 @@ const WishForm: FC<Props> = (props) => {
       />
 
       <TextField
-        {...register("description", { pattern: /^[а-яА-ЯёЁa-zA-Z0-9]+$/ })}
+        {...register("description")}
         multiline
         error={!!errors.description}
         helperText={errors.description?.message}
@@ -125,6 +122,8 @@ const WishForm: FC<Props> = (props) => {
 
       <TextField
         {...register("link")}
+        error={!!errors.link}
+        helperText={errors.link?.message}
         label="Link"
         placeholder="add wish link"
         margin="dense"
@@ -144,7 +143,7 @@ const WishForm: FC<Props> = (props) => {
         <InputLabel>Currency</InputLabel>
         <Controller
           render={({ field }) => (
-            <Select label="Currency" {...field}>
+            <Select className="input-form__select" label="Currency" {...field}>
               <MenuItem value={"USD"}>$</MenuItem>
               <MenuItem value={"EUR"}>€</MenuItem>
               <MenuItem value={"UAH"}>₴</MenuItem>
@@ -155,18 +154,6 @@ const WishForm: FC<Props> = (props) => {
           defaultValue={""}
         />
       </FormControl>
-      {/* <FormControl fullWidth margin="dense">
-        <InputLabel>Currency</InputLabel>
-        <Select
-          value={currency}
-          label="Currency"
-          onChange={handleChangeCurrency}
-        >
-          <MenuItem value={"USD"}>$</MenuItem>
-          <MenuItem value={"EUR"}>€</MenuItem>
-          <MenuItem value={"UAH"}>₴</MenuItem>
-        </Select>
-      </FormControl> */}
 
       <Button className="button-submit" type="submit" variant="contained">
         Add
