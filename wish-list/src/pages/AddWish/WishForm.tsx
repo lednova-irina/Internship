@@ -16,6 +16,8 @@ import { StoreService } from "../../services/StoreService";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddWishModel } from "../../models/AddWishModel";
+import { FormattedMessage, useIntl } from "react-intl";
+
 
 const schema = yup
   .object()
@@ -67,6 +69,8 @@ const WishForm: FC<Props> = (props) => {
   const { id } = useParams<RouteParams>();
   const navigator = useNavigate();
   const queryClient = useQueryClient();
+  const intl = useIntl();
+
   let model = {} as WishModel;
   if (id) {
     model = StoreService.getWish(id) || model;
@@ -102,6 +106,7 @@ const WishForm: FC<Props> = (props) => {
     }
   );
 
+
   return (
     <FormControl
       sx={{
@@ -116,24 +121,26 @@ const WishForm: FC<Props> = (props) => {
       className="input-fields"
       onSubmit={handleSubmit((model: WishModel) => addMutation.mutate(model))}
     >
-      <h1 className="title">Wish list</h1>
+      <h1 className="title">
+        <FormattedMessage id="form_title" />
+      </h1>
       <TextField
         {...register("title")}
         error={!!errors.title}
         helperText={errors.title?.message}
-        label="Title*"
-        placeholder="type wish title"
+        label={ intl.formatMessage({ id: "wish_title" })}
+        placeholder={ intl.formatMessage({ id: "wish_title_placeholder" })}
         margin="dense"
         variant="outlined"
-      />
+      ></TextField>
 
       <TextField
         {...register("description")}
         multiline
         error={!!errors.description}
         helperText={errors.description?.message}
-        label="Description*"
-        placeholder="type wish description"
+        label={ intl.formatMessage({ id: "wish_description" })}
+        placeholder={ intl.formatMessage({ id: "wish_description_placeholder" })} 
         margin="dense"
         variant="outlined"
       />
@@ -142,8 +149,8 @@ const WishForm: FC<Props> = (props) => {
         {...register("link")}
         error={!!errors.link}
         helperText={errors.link?.message}
-        label="Link"
-        placeholder="add wish link"
+        label={ intl.formatMessage({ id: "wish_link" })}
+        placeholder={ intl.formatMessage({ id: "wish_link_placeholder" })}
         margin="dense"
         variant="outlined"
       />
@@ -152,18 +159,18 @@ const WishForm: FC<Props> = (props) => {
         {...register("price")}
         error={!!errors.price}
         helperText={errors.price?.message}
-        label="Price"
-        placeholder="add wish price"
+        label={ intl.formatMessage({ id: "wish_price" })}
+        placeholder={ intl.formatMessage({ id: "wish_price_placeholder" })}
         margin="dense"
         variant="outlined"
       />
       <FormControl fullWidth margin="dense">
-        <InputLabel>Currency</InputLabel>
+        <InputLabel><FormattedMessage id="wish_currency" /></InputLabel>
         <Controller
           render={({ field }) => (
             <Select
               className="input-form__select"
-              label="Currency"
+              label="currency"
               {...field}
               error={!!errors.link}
               // как вывести текст ошибки?  helperText={errors.link?.message} span
@@ -180,7 +187,7 @@ const WishForm: FC<Props> = (props) => {
       </FormControl>
 
       <Button className="button-submit" type="submit" variant="contained">
-        Add
+      <FormattedMessage id="add_btn" />
       </Button>
     </FormControl>
   );

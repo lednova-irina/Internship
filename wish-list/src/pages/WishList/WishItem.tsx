@@ -1,4 +1,5 @@
 import React, { FC } from "react";
+import { FormattedMessage, FormattedNumber } from "react-intl";
 import { useMutation, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
 import { WishModel } from "../../models/WishModel";
@@ -38,20 +39,26 @@ const WishItem: FC<Props> = (props) => {
         <li className="post-item__title">{title}</li>
         <li className="post-item__description">{description}</li>
         <li>{link}</li>
-        <li>
-          {price} {currency}
-        </li>
+        {price && (
+          <li>
+            <FormattedNumber
+              value={price}
+              style={`currency`}
+              currency={currency}
+            ></FormattedNumber>
+          </li>
+        )}
       </ul>
       <Link className="post-item__edit" to={`/edit-wish/${id}`}>
         {" "}
-        Edit
+        <FormattedMessage id="wish_item_edit_btn" />
       </Link>
-      <button className="post-item__done">Done</button>
+      <button className="post-item__done"><FormattedMessage id="wish_item_done_btn" /></button>
       <button
         onClick={() => deleteMutation.mutate(id)}
         className="post-item__delete"
       >
-        Delete
+       <FormattedMessage id="wish_item_delete_btn" />
       </button>
     </div>
   );

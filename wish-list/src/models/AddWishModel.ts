@@ -1,7 +1,7 @@
 export interface AddWishModel {
-    title: string;
-    description: string;
-    link?: string;
-    price?: number;
-    currency?: string;
-  }
+  title: string;
+  description: string;
+  link?: string;
+  price?: number;
+  currency?: string;
+}
