@@ -1,6 +1,6 @@
 import React, { FC } from "react";
-import { QueryClient, useMutation, useQueryClient } from "react-query";
-import { Link, useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "react-query";
+import { Link } from "react-router-dom";
 import { WishModel } from "../../models/WishModel";
 import { StoreService } from "../../services/StoreService";
 
@@ -16,7 +16,7 @@ const WishItem: FC<Props> = (props) => {
   const queryClient = useQueryClient();
 
   const deleteMutation = useMutation(
-    (id: string | undefined) => {
+    (id?: string) => {
       if (id) {
         StoreService.deleteWish(id);
       }
@@ -27,7 +27,7 @@ const WishItem: FC<Props> = (props) => {
         alert(error.message);
       },
       onSuccess: () => {
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries("wishes");
       },
     }
   );
@@ -42,9 +42,10 @@ const WishItem: FC<Props> = (props) => {
           {price} {currency}
         </li>
       </ul>
-      <button className="post-item__edit">
-        <Link to={`/edit-wish/${id}`}> Edit</Link>
-      </button>
+      <Link className="post-item__edit" to={`/edit-wish/${id}`}>
+        {" "}
+        Edit
+      </Link>
       <button className="post-item__done">Done</button>
       <button
         onClick={() => deleteMutation.mutate(id)}

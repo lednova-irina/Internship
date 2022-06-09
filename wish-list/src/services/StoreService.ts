@@ -1,18 +1,18 @@
+import { AddWishModel } from "../models/AddWishModel";
 import { WishModel } from "../models/WishModel";
 const storeKey = "WishesStore";
 export const StoreService = {
   getStore: (): Array<WishModel> =>
     localStorage.getItem(storeKey)
       ? JSON.parse(localStorage.getItem(storeKey) as string)
-      : new Array<WishModel>(),
+      : new Array<AddWishModel>(),
   setStorage: (store: Array<WishModel>) =>
     localStorage.setItem(storeKey, JSON.stringify(store)),
 
-  addWish: (value: WishModel) => {
+  addWish: (value: AddWishModel) => {
     const store = StoreService.getStore();
-
-    value.id = Date.now().toString();
-    store.push(value);
+    const model = { ...value, id: Date.now().toString() };
+    store.push(model);
     StoreService.setStorage(store);
   },
   editWish: (wish: WishModel) => {
@@ -25,12 +25,12 @@ export const StoreService = {
     }
     return false;
   },
-  addOrEdit: (wish: WishModel) => {
-    const isEdit = StoreService.editWish(wish);
-    if (!isEdit) {
-      StoreService.addWish(wish);
-    }
-  },
+  //   addOrEdit: (wish: WishModel) => {
+  //     const isEdit = StoreService.editWish(wish);
+  //     if (!isEdit) {
+  //       StoreService.addWish(wish);
+  //     }
+  //   },
   getWish: (id: string) => {
     const store = StoreService.getStore();
     return store.find((wish) => wish.id === id);

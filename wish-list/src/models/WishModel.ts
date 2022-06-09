@@ -1,8 +1,10 @@
 export interface WishModel {
-  id: string | undefined;
+  id: string;
   title: string;
-  description: string | undefined;
+  description: string;
   link?: string;
   price?: number;
   currency?: string;
 }
+
+export interface ViewWishModel extends WishModel {}

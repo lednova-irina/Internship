@@ -15,46 +15,52 @@ import * as yup from "yup";
 import { StoreService } from "../../services/StoreService";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
+import { AddWishModel } from "../../models/AddWishModel";
 
 const schema = yup
   .object()
-  .shape({
-    title: yup
-      .string()
-      .required("Fill this field")
-      .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,99}[a-z0-9]$/i, {
-        message: "Use valid characters",
+  .shape(
+    {
+      title: yup
+        .string()
+        .required("Fill this field")
+        .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,99}[a-z0-9]$/i, {
+          message: "Use valid characters",
+        }),
+      description: yup
+        .string()
+        .required("Fill this field")
+        .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,300}[a-z0-9]$/i, {
+          message: "Use valid characters",
+        }),
+      link: yup.string().url("Use only url"),
+      price: yup
+        .number()
+        .typeError("Use only numbers")
+        .positive("Use only positive price")
+        .nullable()
+        .transform((value: string, originalValue: string) =>
+          originalValue.trim() === "" ? null : value
+        )
+        .when("currency", {
+          is: (currency: string) => !!currency,
+          then: yup.number().required("Price is required"),
+        }),
+      currency: yup.string().when("price", {
+        is: (price: number) => !!price,
+        then: yup.string().required({
+          message: "Fill this field",
+        }),
       }),
-    description: yup
-      .string()
-      .required("Fill this field")
-      .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,300}[a-z0-9]$/i, {
-        message: "Use valid characters",
-      }),
-    link: yup.string().url("Use only url"),
-    price: yup
-      .number()
-      .typeError("Use only numbers")
-      .positive("Use only positive price")
-      .nullable()
-      .transform((value: string, originalValue: string) =>
-        originalValue.trim() === "" ? null : value
-      ),
-    // .when("currency", {
-    //   is: "",
-    //   then: yup.number().required("Price is required"),
-    // }),
-    currency: yup.string().when("price", {
-      is: (price: number) => !!price,
-      then: yup.string().required("Fill this field"),
-    }),
-  })
+    },
+    [["price", "currency"]]
+  )
   .required();
 type Props = {
-  model?: WishModel;
+  model?: AddWishModel;
 };
 type RouteParams = {
-  id: string;
+  id?: string;
 };
 
 const WishForm: FC<Props> = (props) => {
@@ -77,15 +83,18 @@ const WishForm: FC<Props> = (props) => {
 
   const addMutation = useMutation(
     (data: WishModel) => {
-      data.id = id;
-      StoreService.addOrEdit(data);
-
+      if (!id) {
+        StoreService.addWish(data);
+      } else {
+        data.id = id;
+        StoreService.editWish(data);
+      }
       return Promise.resolve();
     },
     {
       onSuccess: () => {
         navigator("/wish-list");
-        queryClient.invalidateQueries();
+        queryClient.invalidateQueries("wishes");
       },
       onError: (error: any) => {
         alert(error.message);
@@ -157,7 +166,7 @@ const WishForm: FC<Props> = (props) => {
               label="Currency"
               {...field}
               error={!!errors.link}
-              // как вывести текст ошибки?  helperText={errors.link?.message}
+              // как вывести текст ошибки?  helperText={errors.link?.message} span
             >
               <MenuItem value={"USD"}>$</MenuItem>
               <MenuItem value={"EUR"}>€</MenuItem>
