@@ -19,7 +19,7 @@ const queryClient = new QueryClient({
 // const locale = LOCALES.UKRAINIAN;
 
 const App: FC = () => {
-  const [currentLocale, setCurrentLocale] = useState('');
+  const [currentLocale, setCurrentLocale] = useState(LOCALES.ENGLISH);
 
 
   return (
@@ -27,7 +27,7 @@ const App: FC = () => {
       <IntlProvider
         messages={messages[currentLocale]}
         locale={currentLocale}
-        defaultLocale={LOCALES.ENGLISH}
+
       >
         <BrowserRouter>
         <LanguageContext.Provider value={{currentLocale, setCurrentLocale}}>
