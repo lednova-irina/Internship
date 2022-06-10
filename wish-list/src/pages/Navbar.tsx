@@ -1,13 +1,7 @@
 import { Link, Outlet } from "react-router-dom";
 import React, { FC, useContext } from "react";
 import { FormattedMessage } from "react-intl";
-import { LOCALES } from "../localisation/locales";
-// import {
-//   FormControl,
-//   InputLabel,
-//   MenuItem,
-//   Select,
-// } from "@mui/material";
+import { LOCALES } from "../localization/locales";
 import { LanguageContext } from "../contexts/LanguageContext";
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -57,23 +51,6 @@ const Navbar: FC = () => {
     </ToggleButtonGroup>
  
 
-      {/* <FormControl
-        sx={{
-          width: "200px",
-          backgroundColor: "#F2F2EB",
-          opacity: "0.8",
-          borderRadius: "5px ",
-        }}
-      >
-        <InputLabel>
-          <FormattedMessage id="language" />
-        </InputLabel>
-        <Select label="Age" value={currentLocale} onChange={onChange}>
-          <MenuItem value={LOCALES.ENGLISH}>English</MenuItem>
-          <MenuItem value={LOCALES.RUSSIAN}>Русский</MenuItem>
-          <MenuItem value={LOCALES.UKRAINIAN}>Українська</MenuItem>
-        </Select>
-      </FormControl> */}
 
       <Outlet />
     </>

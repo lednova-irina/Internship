@@ -3,35 +3,26 @@ import { IntlProvider } from "react-intl";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { LanguageContext } from "./contexts/LanguageContext";
-import { LOCALES } from "./localisation/locales";
-import { messages } from "./localisation/messages";
+import LanguageProvider from "./localization/LanguageProvider";
+import { LOCALES } from "./localization/locales";
+import { messages } from "./localization/messages";
 import WishForm from "./pages/AddWish/WishForm";
 import WishArchive from "./pages/Archive/WishArchive";
 import Navbar from "./pages/Navbar";
 import NoPage from "./pages/NoPage";
 import WishList from "./pages/WishList/WishList";
 
-
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
 });
 
-// const locale = LOCALES.UKRAINIAN;
-
 const App: FC = () => {
-  const [currentLocale, setCurrentLocale] = useState(LOCALES.ENGLISH);
-
-
+  //обьеденить в один контекст
   return (
     <QueryClientProvider client={queryClient}>
-      <IntlProvider
-        messages={messages[currentLocale]}
-        locale={currentLocale}
-
-      >
+      <LanguageProvider>
         <BrowserRouter>
-        <LanguageContext.Provider value={{currentLocale, setCurrentLocale}}>
-          <Navbar/>
+          <Navbar />
           <Routes>
             <Route path="/" element={<WishList />}></Route>
             <Route path="/wish-list" element={<WishList />}></Route>
@@ -40,9 +31,8 @@ const App: FC = () => {
             <Route path="/archive" element={<WishArchive />}></Route>
             <Route path="*" element={<NoPage />}></Route>
           </Routes>
-          </LanguageContext.Provider>
         </BrowserRouter>
-      </IntlProvider>
+      </LanguageProvider>
     </QueryClientProvider>
   );
 };
