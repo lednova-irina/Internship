@@ -1,11 +1,7 @@
-import { FC, useContext, useState } from "react";
-import { IntlProvider } from "react-intl";
+import { FC } from "react";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { LanguageContext } from "./contexts/LanguageContext";
 import LanguageProvider from "./localization/LanguageProvider";
-import { LOCALES } from "./localization/locales";
-import { messages } from "./localization/messages";
 import WishForm from "./pages/AddWish/WishForm";
 import WishArchive from "./pages/Archive/WishArchive";
 import Navbar from "./pages/Navbar";
@@ -17,7 +13,7 @@ const queryClient = new QueryClient({
 });
 
 const App: FC = () => {
-  //обьеденить в один контекст
+
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>

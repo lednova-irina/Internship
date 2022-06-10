@@ -9,7 +9,18 @@ type Props = {
   children: React.ReactNode | React.ReactNode[];
 };
 const LanguageProvider: FC<Props> = (props) => {
-  const [currentLocale, setCurrentLocale] = useState(LOCALES.ENGLISH);
+  const userLang = navigator.language;
+  let defaultLang:string;
+  if (userLang === "ua-UA") {
+    defaultLang = LOCALES.UKRAINIAN;
+  } else if (userLang === "ru-RU") {
+    defaultLang = LOCALES.RUSSIAN;
+  } else {
+    defaultLang = LOCALES.ENGLISH;
+  }
+
+  const [currentLocale, setCurrentLocale] = useState(defaultLang);
+
   return (
     <LanguageContext.Provider value={{ currentLocale, setCurrentLocale }}>
       <IntlProvider messages={messages[currentLocale]} locale={currentLocale}>
