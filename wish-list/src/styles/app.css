@@ -10,18 +10,13 @@
 #root {
   font-family: "Montserrat", sans-serif;
   font-size: 14px;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   background: #53736a;
 }
-.wish-list {
-  width: 100%;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-}
+
 .title {
   margin: 20px 0;
   color: #c2c0a6;
@@ -29,26 +24,15 @@
   font-weight: 900;
   text-align: center;
 }
-/* .input-form,
-.post-list {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  width: 100%;
-} */
+
+/* wish form */
 .input-fields {
   width: 60%;
 }
 .input-form__select {
-  background-color: #F2F2EB;
+  background-color: #f2f2eb;
   opacity: 0.8;
   border-radius: 5px;
-}
-.post-item {
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  flex: 33% 1 1;
 }
 
 .button-submit {
@@ -56,17 +40,63 @@
   font-family: inherit;
   font-weight: 300;
 }
+
+/*navbar*/
 .navbar {
   display: flex;
   justify-content: space-around;
   width: 100%;
   text-decoration: none;
   background-color: #024554;
-  height: 10vh;
+  height: 50px;
   align-items: center;
 }
 .navLink {
   text-decoration: none;
   color: #f2f2eb;
   font-size: medium;
+}
+.lang_btn{
+  background: #c2c0a6;
+  opacity: 0.8;
+}
+
+/* wish list */
+.wish-list {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+
+}
+.wish-item {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  background-color: #f2f2eb;
+}
+.wish-list__item {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr 1fr 1fr ;
+  gap: 2.5% 5%;
+  margin: 0 5% 5% 5%;
+
+}
+.wish-item__title{
+  height: 18%;
+  background: #c2c0a6;
+  
+}
+.wish-item__description{
+  height: 70%;
+}
+.wish-item__btns {
+  justify-content: space-around;
+  height: 12%;
+}
+
+.wish-item__edit:first-child{
+  text-decoration: none;
 }

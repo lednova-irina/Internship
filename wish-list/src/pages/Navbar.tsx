@@ -3,8 +3,8 @@ import React, { FC, useContext } from "react";
 import { FormattedMessage } from "react-intl";
 import { LOCALES } from "../localization/locales";
 import { LanguageContext } from "../contexts/LanguageContext";
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
 
 const Navbar: FC = () => {
   const { currentLocale, setCurrentLocale } = useContext(LanguageContext);
@@ -33,24 +33,23 @@ const Navbar: FC = () => {
         </div>
       </nav>
       <ToggleButtonGroup
-     value={currentLocale}
-      exclusive
-      onChange={onChange}
-      aria-label="text alignment"
-    >
-      <ToggleButton value={LOCALES.RUSSIAN} aria-label="left aligned">
-        RU
-      </ToggleButton>
-      <ToggleButton value={LOCALES.ENGLISH} aria-label="centered">
-       EN
-      </ToggleButton>
-      <ToggleButton value={LOCALES.UKRAINIAN} aria-label="right aligned">
-       UA
-      </ToggleButton>
-     
-    </ToggleButtonGroup>
- 
-
+      className="lang_btn"
+        value={currentLocale}
+        exclusive
+        onChange={onChange}
+        aria-label="text alignment"
+        size="small"
+      >
+        <ToggleButton value={LOCALES.RUSSIAN} aria-label="left aligned">
+          RU
+        </ToggleButton>
+        <ToggleButton value={LOCALES.ENGLISH} aria-label="centered">
+          EN
+        </ToggleButton>
+        <ToggleButton value={LOCALES.UKRAINIAN} aria-label="right aligned">
+          UA
+        </ToggleButton>
+      </ToggleButtonGroup>
 
       <Outlet />
     </>

@@ -17,7 +17,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { AddWishModel } from "../../models/AddWishModel";
 import { FormattedMessage, useIntl } from "react-intl";
 
-
 const schema = yup
   .object()
   .shape(
@@ -28,20 +27,16 @@ const schema = yup
         .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,99}[a-z0-9]$/i, {
           message: "Use valid characters",
         }),
-      description: yup
-        .string()
-        .required("Fill this field")
-        .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,300}[a-z0-9]$/i, {
-          message: "Use valid characters",
-        }),
+      description: yup.string().required("Fill this field"),
+
       link: yup.string().url("Use only url"),
       price: yup
         .number()
         .typeError("Use only numbers")
         .positive("Use only positive price")
         .nullable()
-        .transform((value: string, originalValue: string) =>
-          originalValue.trim() === "" ? null : value
+        .transform((value: number, originalValue: number) =>
+          originalValue.toString().trim() === "" ? null : value
         )
         .when("currency", {
           is: (currency: string) => !!currency,
@@ -105,7 +100,6 @@ const WishForm: FC<Props> = (props) => {
     }
   );
 
-
   return (
     <FormControl
       sx={{
@@ -127,8 +121,8 @@ const WishForm: FC<Props> = (props) => {
         {...register("title")}
         error={!!errors.title}
         helperText={errors.title?.message}
-        label={ intl.formatMessage({ id: "wish_title" })}
-        placeholder={ intl.formatMessage({ id: "wish_title_placeholder" })}
+        label={intl.formatMessage({ id: "wish_title" })}
+        placeholder={intl.formatMessage({ id: "wish_title_placeholder" })}
         margin="dense"
         variant="outlined"
       ></TextField>
@@ -138,8 +132,8 @@ const WishForm: FC<Props> = (props) => {
         multiline
         error={!!errors.description}
         helperText={errors.description?.message}
-        label={ intl.formatMessage({ id: "wish_description" })}
-        placeholder={ intl.formatMessage({ id: "wish_description_placeholder" })} 
+        label={intl.formatMessage({ id: "wish_description" })}
+        placeholder={intl.formatMessage({ id: "wish_description_placeholder" })}
         margin="dense"
         variant="outlined"
       />
@@ -148,8 +142,8 @@ const WishForm: FC<Props> = (props) => {
         {...register("link")}
         error={!!errors.link}
         helperText={errors.link?.message}
-        label={ intl.formatMessage({ id: "wish_link" })}
-        placeholder={ intl.formatMessage({ id: "wish_link_placeholder" })}
+        label={intl.formatMessage({ id: "wish_link" })}
+        placeholder={intl.formatMessage({ id: "wish_link_placeholder" })}
         margin="dense"
         variant="outlined"
       />
@@ -158,13 +152,15 @@ const WishForm: FC<Props> = (props) => {
         {...register("price")}
         error={!!errors.price}
         helperText={errors.price?.message}
-        label={ intl.formatMessage({ id: "wish_price" })}
-        placeholder={ intl.formatMessage({ id: "wish_price_placeholder" })}
+        label={intl.formatMessage({ id: "wish_price" })}
+        placeholder={intl.formatMessage({ id: "wish_price_placeholder" })}
         margin="dense"
         variant="outlined"
       />
       <FormControl fullWidth margin="dense">
-        <InputLabel><FormattedMessage id="wish_currency" /></InputLabel>
+        <InputLabel>
+          <FormattedMessage id="wish_currency" />
+        </InputLabel>
         <Controller
           render={({ field }) => (
             <Select
@@ -186,7 +182,7 @@ const WishForm: FC<Props> = (props) => {
       </FormControl>
 
       <Button className="button-submit" type="submit" variant="contained">
-      <FormattedMessage id="add_btn" />
+        <FormattedMessage id="add_btn" />
       </Button>
     </FormControl>
   );

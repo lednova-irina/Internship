@@ -22,11 +22,11 @@ export const messages = {
     wish_item_edit_btn: "Edit",
     wish_item_done_btn: "Done",
     wish_item_delete_btn: "Delete",
+    wish_item_link:"Link",
 
     archive_title: "Fulfilled wishes",
 
-    language:"Language",
-    // lading:"Loading...",
+
   },
   [LOCALES.RUSSIAN]: {
     form_title: "Список желаний",
@@ -49,10 +49,10 @@ export const messages = {
     wish_item_edit_btn: "Редактировать",
     wish_item_done_btn: "Выполнено",
     wish_item_delete_btn: "Удалить",
+    wish_item_link:"Ссылка",
 
     archive_title: "Исполненные желания",
-    language:"Язык",
-    // lading:"Загрузка...",
+   
   },
   [LOCALES.UKRAINIAN]: {
     form_title: "Список бажань",
@@ -75,9 +75,9 @@ export const messages = {
     wish_item_edit_btn: "Редагувати",
     wish_item_done_btn: "Виконано",
     wish_item_delete_btn: "Видалити",
+    wish_item_link:"Посилання",
 
     archive_title: "Виконані бажання",
-    language:"Мова",
-    // lading:"Завантаження...",
+   
   },
 };

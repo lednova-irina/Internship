@@ -21,12 +21,9 @@ const WishList: FC = () => {
         <FormattedMessage id="wish_list_title" />
       </h1>
       {isLoading ? (
-        <div>
-          {/* <FormattedMessage id="loading" /> */}
-          Loading...
-        </div>
+        <div>Loading...</div>
       ) : (
-        <div className="wish-list">
+        <div className="wish-list__item">
           {data && data.map((wish) => <WishItem key={wish.id} post={wish} />)}
         </div>
       )}
