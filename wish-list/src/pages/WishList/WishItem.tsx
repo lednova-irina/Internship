@@ -1,4 +1,3 @@
-import { ExpandMore } from "@mui/icons-material";
 import {
   Button,
   Card,
@@ -47,7 +46,14 @@ const WishItem: FC<Props> = (props) => {
       <CardHeader className="wish-item__title" title={title} />
       <CardContent className="wish-item__description">
         <Typography>{description}</Typography>
-        <Typography><a href={link}> <FormattedMessage id="wish_item_link" /></a></Typography>
+        <Typography>
+          {link && (
+            <a href={link}>
+              {" "}
+              <FormattedMessage id="wish_item_link" />
+            </a>
+          )}
+        </Typography>
         {price && (
           <Typography>
             <FormattedNumber
@@ -57,28 +63,27 @@ const WishItem: FC<Props> = (props) => {
             ></FormattedNumber>
           </Typography>
         )}
-        </CardContent>
-        <CardActions className="wish-item__btns">
-          <Button variant="outlined" size="small" className="wish-item__btn">
+      </CardContent>
+      <CardActions className="wish-item__btns">
+        <Button variant="outlined" size="small" className="wish-item__btn">
           <Link className="wish-item__edit" to={`/edit-wish/${id}`}>
             {" "}
             <FormattedMessage id="wish_item_edit_btn" />
           </Link>
-          </Button>
-          <Button variant="outlined" size="small" className="wish-item__btn">
-            {" "}
-            <FormattedMessage id="wish_item_done_btn" />
-          </Button>
-          <Button
+        </Button>
+        <Button variant="outlined" size="small" className="wish-item__btn">
+          {" "}
+          <FormattedMessage id="wish_item_done_btn" />
+        </Button>
+        <Button
           variant="outlined"
-            size="small"
-            onClick={() => deleteMutation.mutate(id)}
-            className="wish-item__btn"
-          >
-            <FormattedMessage id="wish_item_delete_btn" />
-          </Button>
-        </CardActions>
-      
+          size="small"
+          onClick={() => deleteMutation.mutate(id)}
+          className="wish-item__btn"
+        >
+          <FormattedMessage id="wish_item_delete_btn" />
+        </Button>
+      </CardActions>
     </Card>
   );
 };

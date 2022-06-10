@@ -97,6 +97,10 @@
   height: 12%;
 }
 
+/* .wish-item__btn{
+  color: grey;
+} */
+
 .wish-item__edit:first-child{
   text-decoration: none;
 }

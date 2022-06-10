@@ -10,48 +10,14 @@ import {
 } from "@mui/material";
 import { TextField } from "@mui/material";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
 import { StoreService } from "../../services/StoreService";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddWishModel } from "../../models/AddWishModel";
 import { FormattedMessage, useIntl } from "react-intl";
+import {FormSchema} from "../../validation/FormValidation"
 
-const schema = yup
-  .object()
-  .shape(
-    {
-      title: yup
-        .string()
-        .required("Fill this field")
-        .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,99}[a-z0-9]$/i, {
-          message: "Use valid characters",
-        }),
-      description: yup.string().required("Fill this field"),
 
-      link: yup.string().url("Use only url"),
-      price: yup
-        .number()
-        .typeError("Use only numbers")
-        .positive("Use only positive price")
-        .nullable()
-        .transform((value: number, originalValue: number) =>
-          originalValue.toString().trim() === "" ? null : value
-        )
-        .when("currency", {
-          is: (currency: string) => !!currency,
-          then: yup.number().required("Price is required"),
-        }),
-      currency: yup.string().when("price", {
-        is: (price: number) => !!price,
-        then: yup.string().required({
-          message: "Fill this field",
-        }),
-      }),
-    },
-    [["price", "currency"]]
-  )
-  .required();
 type Props = {
   model?: AddWishModel;
 };
@@ -64,7 +30,7 @@ const WishForm: FC<Props> = (props) => {
   const navigator = useNavigate();
   const queryClient = useQueryClient();
   const intl = useIntl();
-
+  
   let model = {} as WishModel;
   if (id) {
     model = StoreService.getWish(id) || model;
@@ -73,9 +39,10 @@ const WishForm: FC<Props> = (props) => {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    formState: { errors, isValid },
   } = useForm<WishModel>({
-    resolver: yupResolver(schema),
+    mode:"onBlur",
+    resolver: yupResolver(FormSchema),
     defaultValues: model,
   });
 
@@ -150,13 +117,15 @@ const WishForm: FC<Props> = (props) => {
 
       <TextField
         {...register("price")}
-        error={!!errors.price}
-        helperText={errors.price?.message}
+        // error={!!errors.price}
+        // helperText={errors.price?.message}
+        
         label={intl.formatMessage({ id: "wish_price" })}
         placeholder={intl.formatMessage({ id: "wish_price_placeholder" })}
         margin="dense"
         variant="outlined"
       />
+     
       <FormControl fullWidth margin="dense">
         <InputLabel>
           <FormattedMessage id="wish_currency" />
@@ -181,7 +150,7 @@ const WishForm: FC<Props> = (props) => {
         />
       </FormControl>
 
-      <Button className="button-submit" type="submit" variant="contained">
+      <Button className="button-submit" type="submit" variant="contained" disabled={!isValid}>
         <FormattedMessage id="add_btn" />
       </Button>
     </FormControl>
