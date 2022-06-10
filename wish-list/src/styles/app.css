@@ -14,17 +14,17 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: #53736A;
+  background: #53736a;
 }
 .wish-list {
-  width: 80%;
+  width: 100%;
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   align-items: center;
 }
 .title {
   margin: 20px 0;
-  color: #C2C0A6;
+  color: #c2c0a6;
   font-size: 45px;
   font-weight: 900;
   text-align: center;
@@ -36,13 +36,19 @@
   flex-wrap: wrap;
   width: 100%;
 } */
-.input-fields{
+.input-fields {
   width: 60%;
+}
+.input-form__select {
+  background-color: #F2F2EB;
+  opacity: 0.8;
+  border-radius: 5px;
 }
 .post-item {
   display: flex;
   justify-content: center;
   width: 100%;
+  flex: 33% 1 1;
 }
 
 .button-submit {
@@ -50,8 +56,8 @@
   font-family: inherit;
   font-weight: 300;
 }
-.navbar{
-    display: flex;
+.navbar {
+  display: flex;
   justify-content: space-around;
   width: 100%;
   text-decoration: none;
@@ -59,8 +65,8 @@
   height: 10vh;
   align-items: center;
 }
-.navLink{
+.navLink {
   text-decoration: none;
-  color: #F2F2EB;
-  font-size:medium;
+  color: #f2f2eb;
+  font-size: medium;
 }
