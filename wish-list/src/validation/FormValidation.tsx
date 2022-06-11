@@ -6,28 +6,36 @@ export const FormSchema = yup
     {
       title: yup
         .string()
-        .required("Fill this field")
+        .required("validations_required_field")
         .matches(/^[а-яА-ЯёЁa-zA-Z0-9]+$/i, {
-          message: "Use only letters",
+          message: "validations_only_letters",
         }),
-      description: yup.string().required("Fill this field"),
-      link: yup.string().url("Use only url"),
+      description: yup.string().required("validations_required_field"),
+      link: yup.string().nullable().url("validations_only_url"),
       price: yup
         .number()
-        .typeError("Use only numbers")
-        .positive("Use only positive price")
         .nullable()
+        .typeError("validations_only_numbers")
         .transform((value: number, originalValue: number) =>
           originalValue.toString().trim() === "" ? null : value
         )
         .when("currency", {
           is: (currency: string) => !!currency,
-          then: yup.number().required("Price is required"),
+          then: yup
+            .number()
+            .nullable()
+            .required("validations_required_field")
+            .typeError("validations_only_numbers")
+            .positive("validations_only_positive_price"),
         }),
-      currency: yup.string().when("price", {
-        is: (price: number) => !!price,
-        then: yup.string().required("Fill this field"),
-      }),
+
+      currency: yup
+        .string()
+        .nullable()
+        .when("price", {
+          is: (price: number) => !!price,
+          then: yup.string().required("validations_required_field"),
+        }),
     },
     [["price", "currency"]]
   )

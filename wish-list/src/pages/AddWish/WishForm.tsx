@@ -4,6 +4,7 @@ import { WishModel } from "../../models/WishModel";
 import {
   Button,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
@@ -15,8 +16,7 @@ import { useMutation, useQueryClient } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
 import { AddWishModel } from "../../models/AddWishModel";
 import { FormattedMessage, useIntl } from "react-intl";
-import {FormSchema} from "../../validation/FormValidation"
-
+import { FormSchema } from "../../validation/FormValidation";
 
 type Props = {
   model?: AddWishModel;
@@ -30,7 +30,7 @@ const WishForm: FC<Props> = (props) => {
   const navigator = useNavigate();
   const queryClient = useQueryClient();
   const intl = useIntl();
-  
+
   let model = {} as WishModel;
   if (id) {
     model = StoreService.getWish(id) || model;
@@ -39,9 +39,10 @@ const WishForm: FC<Props> = (props) => {
     register,
     handleSubmit,
     control,
+    trigger,
     formState: { errors, isValid },
   } = useForm<WishModel>({
-    mode:"onBlur",
+    mode: "all",
     resolver: yupResolver(FormSchema),
     defaultValues: model,
   });
@@ -87,7 +88,9 @@ const WishForm: FC<Props> = (props) => {
       <TextField
         {...register("title")}
         error={!!errors.title}
-        helperText={errors.title?.message}
+        helperText={
+          errors.title && intl.formatMessage({ id: errors.title.message })
+        }
         label={intl.formatMessage({ id: "wish_title" })}
         placeholder={intl.formatMessage({ id: "wish_title_placeholder" })}
         margin="dense"
@@ -98,7 +101,10 @@ const WishForm: FC<Props> = (props) => {
         {...register("description")}
         multiline
         error={!!errors.description}
-        helperText={errors.description?.message}
+        helperText={
+          errors.description &&
+          intl.formatMessage({ id: errors.description.message })
+        }
         label={intl.formatMessage({ id: "wish_description" })}
         placeholder={intl.formatMessage({ id: "wish_description_placeholder" })}
         margin="dense"
@@ -108,7 +114,9 @@ const WishForm: FC<Props> = (props) => {
       <TextField
         {...register("link")}
         error={!!errors.link}
-        helperText={errors.link?.message}
+        helperText={
+          errors.link && intl.formatMessage({ id: errors.link.message })
+        }
         label={intl.formatMessage({ id: "wish_link" })}
         placeholder={intl.formatMessage({ id: "wish_link_placeholder" })}
         margin="dense"
@@ -117,16 +125,17 @@ const WishForm: FC<Props> = (props) => {
 
       <TextField
         {...register("price")}
-        // error={!!errors.price}
-        // helperText={errors.price?.message}
-        
+        error={!!errors.price}
+        helperText={
+          errors.price && intl.formatMessage({ id: errors.price.message })
+        }
         label={intl.formatMessage({ id: "wish_price" })}
         placeholder={intl.formatMessage({ id: "wish_price_placeholder" })}
         margin="dense"
         variant="outlined"
       />
-     
-      <FormControl fullWidth margin="dense">
+
+      <FormControl fullWidth margin="dense" error={!!errors.currency}>
         <InputLabel>
           <FormattedMessage id="wish_currency" />
         </InputLabel>
@@ -136,8 +145,11 @@ const WishForm: FC<Props> = (props) => {
               className="input-form__select"
               label="currency"
               {...field}
-              error={!!errors.link}
-              // как вывести текст ошибки?  helperText={errors.link?.message} span
+              error={!!errors.currency}
+              onChange={async (e) => {
+                field.onChange(e);
+                await trigger("price");
+              }}
             >
               <MenuItem value={"USD"}>$</MenuItem>
               <MenuItem value={"EUR"}>€</MenuItem>
@@ -148,9 +160,20 @@ const WishForm: FC<Props> = (props) => {
           name="currency"
           defaultValue={""}
         />
+        {errors.currency && (
+          <FormHelperText>
+            {errors.currency &&
+              intl.formatMessage({ id: errors.currency.message })}
+          </FormHelperText>
+        )}
       </FormControl>
 
-      <Button className="button-submit" type="submit" variant="contained" disabled={!isValid}>
+      <Button
+        className="button-submit"
+        type="submit"
+        variant="contained"
+        disabled={!isValid}
+      >
         <FormattedMessage id="add_btn" />
       </Button>
     </FormControl>
