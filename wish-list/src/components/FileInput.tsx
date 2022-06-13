@@ -1,10 +1,10 @@
-import { Button } from '@mui/material';
-import React, { FC } from 'react';
+import {Button} from '@mui/material';
+import React, {FC} from 'react';
 // эта пока заготовка))
 const FileInput: FC = () => (
   <div>
     <input
-      style={{ display: 'none' }}
+      style={{display: 'none'}}
       accept="image/*"
       type="file"
       id="select-image"

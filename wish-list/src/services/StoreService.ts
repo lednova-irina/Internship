@@ -1,5 +1,5 @@
-import { AddWishModel } from '../models/AddWishModel';
-import { WishModel } from '../models/WishModel';
+import {AddWishModel} from '../models/AddWishModel';
+import {WishModel} from '../models/WishModel';
 
 const storeKey = 'WishesStore';
 
@@ -7,13 +7,13 @@ export const StoreService = {
   getStore: (): Array<WishModel> =>
     localStorage.getItem(storeKey)
       ? JSON.parse(localStorage.getItem(storeKey) as string)
-      : new Array<AddWishModel>(),
+      : [],
   setStorage: (store: Array<WishModel>) =>
     localStorage.setItem(storeKey, JSON.stringify(store)),
 
   addWish: (value: AddWishModel) => {
     const store = StoreService.getStore();
-    const model = { ...value, id: Date.now().toString() };
+    const model = {...value, id: Date.now().toString()};
     store.push(model);
     StoreService.setStorage(store);
   },
@@ -45,6 +45,6 @@ export const StoreService = {
     StoreService.setStorage(result);
   },
   deleteAllWishes: () => {
-    StoreService.setStorage(new Array<WishModel>());
+    StoreService.setStorage([]);
   },
 };
