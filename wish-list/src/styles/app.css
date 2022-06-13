@@ -56,8 +56,8 @@
   color: #f2f2eb;
   font-size: medium;
 }
-.lang_btn{
-  background: #c2c0a6;
+.lang_btn {
+  background: #deddcc;
   opacity: 0.8;
 }
 
@@ -68,7 +68,6 @@
   flex-wrap: wrap;
   align-items: center;
   justify-content: center;
-
 }
 .wish-item {
   display: flex;
@@ -79,28 +78,31 @@
 .wish-list__item {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  grid-template-rows: 1fr 1fr 1fr ;
+  grid-template-rows: 1fr 1fr 1fr;
   gap: 2.5% 5%;
   margin: 0 5% 5% 5%;
-
 }
-.wish-item__title{
+.wish-item__title {
   height: 18%;
   background: #c2c0a6;
-  
+  color: #f2f2eb;
 }
-.wish-item__description{
+.wish-item__description {
   height: 70%;
+  color: grey;
 }
 .wish-item__btns {
   justify-content: space-around;
   height: 12%;
 }
 
+.wish-item__description :first-child {
+  color: darkgray;
+}
 /* .wish-item__btn{
   color: grey;
 } */
 
-.wish-item__edit:first-child{
+.wish-item__edit:first-child {
   text-decoration: none;
 }

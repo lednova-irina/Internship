@@ -1,6 +1,7 @@
 import React, { FC, useState } from "react";
 import { FormattedMessage } from "react-intl";
 import { useQuery } from "react-query";
+import Loader from "../../loader/Loader";
 import { StoreService } from "../../services/StoreService";
 import WishItem from "./WishItem";
 
@@ -20,8 +21,9 @@ const WishList: FC = () => {
       <h1 className="title">
         <FormattedMessage id="wish_list_title" />
       </h1>
+
       {isLoading ? (
-        <div>Loading...</div>
+        <Loader></Loader>
       ) : (
         <div className="wish-list__item">
           {data && data.map((wish) => <WishItem key={wish.id} post={wish} />)}

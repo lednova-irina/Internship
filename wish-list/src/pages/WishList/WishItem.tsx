@@ -46,9 +46,9 @@ const WishItem: FC<Props> = (props) => {
       <CardHeader className="wish-item__title" title={title} />
       <CardContent className="wish-item__description">
         <Typography>{description}</Typography>
-        <Typography>
+        <Typography >
           {link && (
-            <a href={link}>
+            <a href={link} className="wish-item__link" >
               {" "}
               <FormattedMessage id="wish_item_link" />
             </a>

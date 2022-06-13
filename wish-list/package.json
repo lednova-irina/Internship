@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
+    "@formatjs/ts-transformer": "^3.9.8",
     "@hookform/resolvers": "^2.8.10",
     "@mui/icons-material": "^5.8.0",
     "@mui/material": "^5.8.1",
@@ -19,6 +20,7 @@
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.31.3",
     "react-intl": "^6.0.4",
+    "react-loader-spinner": "^5.1.5",
     "react-query": "^3.39.1",
     "react-router-dom": "^6.3.0",
     "react-scripts": "^5.0.1",
