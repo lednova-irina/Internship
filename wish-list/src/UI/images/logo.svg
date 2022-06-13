@@ -1,0 +1,24 @@
+<svg width="500" height="500" xmlns="http://www.w3.org/2000/svg">
+ <!-- Created with SVG Editor - http://github.com/mzalive/SVG Editor/ -->
+ <g>
+  <title>background</title>
+  <rect fill="none" id="canvas_background" height="502" width="502" y="-1" x="-1"/>
+  <g display="none" overflow="visible" y="0" x="0" height="100%" width="100%" id="canvasGrid">
+   <rect fill="url(#gridpattern)" stroke-width="0" y="0" x="0" height="100%" width="100%"/>
+  </g>
+ </g>
+ <g>
+  <title>Layer 1</title>
+  <line stroke="#e5e5e5" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_1" y2="99.114583" x2="401.5" y1="402.114589" x1="100.499996" stroke-width="5" fill="none"/>
+  <line stroke="#e5e5e5" stroke-linecap="undefined" stroke-linejoin="undefined" id="svg_2" y2="103.114584" x2="103.500011" y1="400.114578" x1="399.500001" stroke-width="5" fill="none"/>
+  <ellipse stroke="#e5e5e5" ry="8" rx="8" id="svg_3" cy="406.114583" cx="95.5" stroke-width="5" fill="none"/>
+  <ellipse stroke="#e5e5e5" ry="8" rx="8" id="svg_5" cy="405.114583" cx="404.5" stroke-width="5" fill="none"/>
+  <ellipse stroke="#e5e5e5" ry="8" rx="8" id="svg_6" cy="96.114583" cx="97.5" stroke-width="5" fill="none"/>
+  <ellipse stroke="#e5e5e5" ry="8" rx="8" id="svg_7" cy="95.114583" cx="404.5" stroke-width="5" fill="none"/>
+  <path id="svg_8" d="m204.5,98.11458l25.5,83.88542l26,-61l22,61c8,-28 16,-56 24,-84" stroke-width="5" stroke="#e5e5e5" fill="none"/>
+  <path id="svg_9" d="m370.5,201.114583l-49.5,52.885417l49,47l48,-49l-47.5,-50.885417z" stroke-width="5" stroke="#e5e5e5" fill="none"/>
+  <path stroke="#e5e5e5" id="svg_11" d="m130.5,297.114585l-48.5,-63.811494l20,-27.303091l60,0l19,28.213194l-50.5,62.901391z" stroke-width="5" fill="none"/>
+  <path stroke="#e5e5e5" id="svg_12" d="m201.999996,356.118058l37.050968,0l11.449034,-36.668838l11.449041,36.668838l37.050961,0l-29.974808,22.662329l11.449627,36.668838l-29.974821,-22.662946l-29.974814,22.662946l11.44963,-36.668838l-29.974818,-22.662329z" stroke-width="5" fill="none"/>
+  <path id="svg_14" d="m-246.257498,282.123236l0.763935,0l0.236062,-0.381968l0.236062,0.381968l0.763934,0l-0.618035,0.236066l0.236074,0.381968l-0.618035,-0.236073l-0.618035,0.236073l0.236074,-0.381968l-0.618035,-0.236066z" fill-opacity="null" stroke-opacity="null" stroke-width="5" stroke="#000" fill="none"/>
+ </g>
+</svg>
