@@ -7,7 +7,7 @@ export const FormSchema = yup
       title: yup
         .string()
         .required("validations_required_field")
-        .matches(/^[а-яА-ЯёЁa-zA-Z0-9]+$/i, {
+        .matches(/^[а-яА-ЯёЁa-zA-Z0-9\s]+$/i, {
           message: "validations_only_letters",
         }),
       description: yup.string().required("validations_required_field"),

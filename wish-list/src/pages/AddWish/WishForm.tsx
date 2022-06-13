@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React, { FC, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { WishModel } from "../../models/WishModel";
 import {
@@ -43,7 +43,7 @@ const WishForm: FC<Props> = (props) => {
     formState: { errors, isValid },
   } = useForm<WishModel>({
     mode: "all",
-    resolver: yupResolver(FormSchema),
+    resolver: useMemo(()=>yupResolver(FormSchema),[]),
     defaultValues: model,
   });
 
