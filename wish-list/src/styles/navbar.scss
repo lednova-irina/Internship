@@ -1,0 +1,23 @@
+/*navbar*/
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  text-decoration: none;
+  background-color: #024554;
+  height: 50px;
+  align-items: center;
+  padding: 0 5%;
+  .navLink {
+    text-decoration: none;
+    color: #f2f2eb;
+    font-size: medium;
+  }
+  .nav_logo {
+    height: 65px;
+  }
+}
+.lang_btn {
+  background: #deddcc;
+  opacity: 0.8;
+}
