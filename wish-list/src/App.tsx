@@ -1,19 +1,19 @@
-import { FC } from "react";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LanguageProvider from "./localization/LanguageProvider";
-import WishForm from "./pages/AddWish/WishForm";
-import WishArchive from "./pages/Archive/WishArchive";
-import Navbar from "./pages/Navbar";
-import NoPage from "./pages/NoPage";
-import WishList from "./pages/WishList/WishList";
+import { FC } from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LanguageProvider from './localization/LanguageProvider';
+import WishForm from './pages/AddWish/WishForm';
+import WishArchive from './pages/Archive/WishArchive';
+import Navbar from './components/Navbar';
+import NoPage from './pages/NoPage';
+import WishList from './pages/WishList/WishList';
+import React from 'react';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { refetchOnWindowFocus: false } },
 });
 
 const App: FC = () => {
-
   return (
     <QueryClientProvider client={queryClient}>
       <LanguageProvider>

@@ -5,7 +5,7 @@ export const FormSchema = yup
   .shape(
     {
       title: yup
-        .string()
+        .string().max(30,"validations_max_length")
         .required("validations_required_field")
         .matches(/^[а-яА-ЯёЁa-zA-Z0-9\s]+$/i, {
           message: "validations_only_letters",

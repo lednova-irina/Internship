@@ -5,6 +5,7 @@ export interface WishModel {
   link?: string;
   price?: number;
   currency?: string;
+  picture?:string;
 }
 
 export interface ViewWishModel extends WishModel {}

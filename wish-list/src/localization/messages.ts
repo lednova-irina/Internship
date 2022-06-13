@@ -34,7 +34,7 @@ export type LocalizationKeys = {
 
 export const messages = {
   [LOCALES.ENGLISH]: {
-    form_title: "Wish list",
+    form_title: "Create wish",
     wish_title: "Title*",
     wish_title_placeholder: "type wish title",
     wish_description: "Description*",
@@ -59,6 +59,7 @@ export const messages = {
     archive_title: "Fulfilled wishes",
 
     validations_required_field: "Fill this field",
+    validations_max_length: "Title must be at most 30 characters",
     validations_only_letters: "Use only letters",
     validations_only_url: "Use only url",
     validations_only_numbers: "Use only numbers",
@@ -66,7 +67,7 @@ export const messages = {
   } as LocalizationKeys,
 
   [LOCALES.RUSSIAN]: {
-    form_title: "Список желаний",
+    form_title: "Создайте желание",
     wish_title: "Заголовок*",
     wish_title_placeholder: "добавьте заголовок",
     wish_description: "Описание*",
@@ -91,6 +92,7 @@ export const messages = {
     archive_title: "Исполненные желания",
 
     validations_required_field: "Заполните это поле",
+    validations_max_length: "Заголовок должен содержать не более 30 символов",
     validations_only_letters: "Используйте только буквы",
     validations_only_url: "Используйте только URL",
     validations_only_numbers: "Используйте только цифры",
@@ -99,7 +101,7 @@ export const messages = {
   } as LocalizationKeys,
 
   [LOCALES.UKRAINIAN]: {
-    form_title: "Список бажань",
+    form_title: "Створіть бажання",
     wish_title: "Заголовок*",
     wish_title_placeholder: "додайте заголовок",
     wish_description: "Oпис*",
@@ -124,6 +126,7 @@ export const messages = {
     archive_title: "Виконані бажання",
 
     validations_required_field: "Заповніть це поле",
+    validations_max_length: "Назва має містити не більше 30 символів",
     validations_only_letters: "Використовуйте лише літери",
     validations_only_url: "Використовуйте лише URL",
     validations_only_numbers: "Використовуйте лише цифри",

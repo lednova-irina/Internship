@@ -1,6 +1,6 @@
-import React, { FC, useMemo } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { WishModel } from "../../models/WishModel";
+import React, { FC, useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { WishModel } from '../../models/WishModel';
 import {
   Button,
   FormControl,
@@ -8,24 +8,20 @@ import {
   InputLabel,
   MenuItem,
   Select,
-} from "@mui/material";
-import { TextField } from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { StoreService } from "../../services/StoreService";
-import { useMutation, useQueryClient } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import { AddWishModel } from "../../models/AddWishModel";
-import { FormattedMessage, useIntl } from "react-intl";
-import { FormSchema } from "../../validation/FormValidation";
+} from '@mui/material';
+import { TextField } from '@mui/material';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { StoreService } from '../../services/StoreService';
+import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { FormSchema } from '../../validation/FormValidation';
 
-type Props = {
-  model?: AddWishModel;
-};
 type RouteParams = {
   id?: string;
 };
 
-const WishForm: FC<Props> = (props) => {
+const WishForm: FC = () => {
   const { id } = useParams<RouteParams>();
   const navigator = useNavigate();
   const queryClient = useQueryClient();
@@ -42,8 +38,8 @@ const WishForm: FC<Props> = (props) => {
     trigger,
     formState: { errors, isValid },
   } = useForm<WishModel>({
-    mode: "all",
-    resolver: useMemo(()=>yupResolver(FormSchema),[]),
+    mode: 'all',
+    resolver: useMemo(() => yupResolver(FormSchema), []),
     defaultValues: model,
   });
 
@@ -51,6 +47,7 @@ const WishForm: FC<Props> = (props) => {
     (data: WishModel) => {
       if (!id) {
         StoreService.addWish(data);
+        console.log(data.picture);
       } else {
         data.id = id;
         StoreService.editWish(data);
@@ -59,78 +56,80 @@ const WishForm: FC<Props> = (props) => {
     },
     {
       onSuccess: () => {
-        navigator("/wish-list");
-        queryClient.invalidateQueries("wishes");
+        navigator('/wish-list');
+        queryClient.invalidateQueries('wishes');
       },
-      onError: (error: any) => {
+      onError: (error: { message: string }) => {
         alert(error.message);
       },
-    }
+    },
   );
 
   return (
     <FormControl
       sx={{
-        "& .MuiTextField-root": {
-          background: "#F2F2EB",
-          opacity: "0.8",
-          borderRadius: "5px",
+        '& .MuiTextField-root': {
+          background: '#F2F2EB',
+          opacity: '0.8',
+          borderRadius: '5px',
         },
       }}
       component="form"
       autoComplete="off"
       className="input-fields"
-      onSubmit={handleSubmit((model: WishModel) => addMutation.mutate(model))}
+      onSubmit={handleSubmit((model: WishModel) => {
+        addMutation.mutate(model);
+      })}
     >
       <h1 className="title">
         <FormattedMessage id="form_title" />
       </h1>
       <TextField
-        {...register("title")}
+        {...register('title')}
         error={!!errors.title}
         helperText={
           errors.title && intl.formatMessage({ id: errors.title.message })
         }
-        label={intl.formatMessage({ id: "wish_title" })}
-        placeholder={intl.formatMessage({ id: "wish_title_placeholder" })}
+        label={intl.formatMessage({ id: 'wish_title' })}
+        placeholder={intl.formatMessage({ id: 'wish_title_placeholder' })}
         margin="dense"
         variant="outlined"
       ></TextField>
 
       <TextField
-        {...register("description")}
+        {...register('description')}
         multiline
         error={!!errors.description}
         helperText={
           errors.description &&
           intl.formatMessage({ id: errors.description.message })
         }
-        label={intl.formatMessage({ id: "wish_description" })}
-        placeholder={intl.formatMessage({ id: "wish_description_placeholder" })}
+        label={intl.formatMessage({ id: 'wish_description' })}
+        placeholder={intl.formatMessage({ id: 'wish_description_placeholder' })}
         margin="dense"
         variant="outlined"
       />
 
       <TextField
-        {...register("link")}
+        {...register('link')}
         error={!!errors.link}
         helperText={
           errors.link && intl.formatMessage({ id: errors.link.message })
         }
-        label={intl.formatMessage({ id: "wish_link" })}
-        placeholder={intl.formatMessage({ id: "wish_link_placeholder" })}
+        label={intl.formatMessage({ id: 'wish_link' })}
+        placeholder={intl.formatMessage({ id: 'wish_link_placeholder' })}
         margin="dense"
         variant="outlined"
       />
 
       <TextField
-        {...register("price")}
+        {...register('price')}
         error={!!errors.price}
         helperText={
           errors.price && intl.formatMessage({ id: errors.price.message })
         }
-        label={intl.formatMessage({ id: "wish_price" })}
-        placeholder={intl.formatMessage({ id: "wish_price_placeholder" })}
+        label={intl.formatMessage({ id: 'wish_price' })}
+        placeholder={intl.formatMessage({ id: 'wish_price_placeholder' })}
         margin="dense"
         variant="outlined"
       />
@@ -148,17 +147,17 @@ const WishForm: FC<Props> = (props) => {
               error={!!errors.currency}
               onChange={async (e) => {
                 field.onChange(e);
-                await trigger("price");
+                await trigger('price');
               }}
             >
-              <MenuItem value={"USD"}>$</MenuItem>
-              <MenuItem value={"EUR"}>€</MenuItem>
-              <MenuItem value={"UAH"}>₴</MenuItem>
+              <MenuItem value={'USD'}>$</MenuItem>
+              <MenuItem value={'EUR'}>€</MenuItem>
+              <MenuItem value={'UAH'}>₴</MenuItem>
             </Select>
           )}
           control={control}
           name="currency"
-          defaultValue={""}
+          defaultValue={''}
         />
         {errors.currency && (
           <FormHelperText>
@@ -168,6 +167,23 @@ const WishForm: FC<Props> = (props) => {
         )}
       </FormControl>
 
+      {/* <div>
+        <input
+          {...register("picture")}
+          style={{ display: "none" }}
+          accept="image/*"
+          type="file"
+          id="select-image"
+          name="picture"
+        />
+       
+        <label htmlFor="select-image">
+          <Button variant="contained" fullWidth component="span">
+            Upload Image
+          </Button>
+        </label>
+        <img />
+      </div> */}
       <Button
         className="button-submit"
         type="submit"

@@ -1,10 +1,10 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 type LanguageContextType = {
-  currentLocale: string,
-  setCurrentLocale: (value: string) => void,
+  currentLocale: string;
+  setCurrentLocale: (value: string) => void;
 };
 
 export const LanguageContext = createContext<LanguageContextType>(
-  {} as LanguageContextType
+  {} as LanguageContextType,
 );
