@@ -1,6 +1,8 @@
-import { AddWishModel } from "../models/AddWishModel";
-import { WishModel } from "../models/WishModel";
-const storeKey = "WishesStore";
+import { AddWishModel } from '../models/AddWishModel';
+import { WishModel } from '../models/WishModel';
+
+const storeKey = 'WishesStore';
+
 export const StoreService = {
   getStore: (): Array<WishModel> =>
     localStorage.getItem(storeKey)

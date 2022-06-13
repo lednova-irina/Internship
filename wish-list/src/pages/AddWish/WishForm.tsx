@@ -1,71 +1,27 @@
-import React, { FC } from "react";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import { WishModel } from "../../models/WishModel";
+import React, { FC, useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import { WishModel } from '../../models/WishModel';
 import {
   Button,
   FormControl,
+  FormHelperText,
   InputLabel,
   MenuItem,
   Select,
-} from "@mui/material";
-import { TextField } from "@mui/material";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { StoreService } from "../../services/StoreService";
-import { useMutation, useQueryClient } from "react-query";
-import { useNavigate, useParams } from "react-router-dom";
-import { AddWishModel } from "../../models/AddWishModel";
-import { FormattedMessage, useIntl } from "react-intl";
+} from '@mui/material';
+import { TextField } from '@mui/material';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { StoreService } from '../../services/StoreService';
+import { useMutation, useQueryClient } from 'react-query';
+import { useNavigate, useParams } from 'react-router-dom';
+import { FormattedMessage, useIntl } from 'react-intl';
+import { FormSchema } from '../../validation/FormValidation';
 
-
-const schema = yup
-  .object()
-  .shape(
-    {
-      title: yup
-        .string()
-        .required("Fill this field")
-        .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,99}[a-z0-9]$/i, {
-          message: "Use valid characters",
-        }),
-      description: yup
-        .string()
-        .required("Fill this field")
-        .matches(/^(?=[a-z0-9])[a-z0-9\s]{0,300}[a-z0-9]$/i, {
-          message: "Use valid characters",
-        }),
-      link: yup.string().url("Use only url"),
-      price: yup
-        .number()
-        .typeError("Use only numbers")
-        .positive("Use only positive price")
-        .nullable()
-        .transform((value: string, originalValue: string) =>
-          originalValue.trim() === "" ? null : value
-        )
-        .when("currency", {
-          is: (currency: string) => !!currency,
-          then: yup.number().required("Price is required"),
-        }),
-      currency: yup.string().when("price", {
-        is: (price: number) => !!price,
-        then: yup.string().required({
-          message: "Fill this field",
-        }),
-      }),
-    },
-    [["price", "currency"]]
-  )
-  .required();
-type Props = {
-  model?: AddWishModel;
-};
 type RouteParams = {
   id?: string;
 };
 
-const WishForm: FC<Props> = (props) => {
+const WishForm: FC = () => {
   const { id } = useParams<RouteParams>();
   const navigator = useNavigate();
   const queryClient = useQueryClient();
@@ -79,9 +35,11 @@ const WishForm: FC<Props> = (props) => {
     register,
     handleSubmit,
     control,
-    formState: { errors },
+    trigger,
+    formState: { errors, isValid },
   } = useForm<WishModel>({
-    resolver: yupResolver(schema),
+    mode: 'all',
+    resolver: useMemo(() => yupResolver(FormSchema), []),
     defaultValues: model,
   });
 
@@ -89,6 +47,7 @@ const WishForm: FC<Props> = (props) => {
     (data: WishModel) => {
       if (!id) {
         StoreService.addWish(data);
+        console.log(data.picture);
       } else {
         data.id = id;
         StoreService.editWish(data);
@@ -97,97 +56,141 @@ const WishForm: FC<Props> = (props) => {
     },
     {
       onSuccess: () => {
-        navigator("/wish-list");
-        queryClient.invalidateQueries("wishes");
+        navigator('/wish-list');
+        queryClient.invalidateQueries('wishes');
       },
-      onError: (error: any) => {
+      onError: (error: { message: string }) => {
         alert(error.message);
       },
-    }
+    },
   );
-
 
   return (
     <FormControl
       sx={{
-        "& .MuiTextField-root": {
-          background: "#F2F2EB",
-          opacity: "0.8",
-          borderRadius: "5px",
+        '& .MuiTextField-root': {
+          background: '#F2F2EB',
+          opacity: '0.8',
+          borderRadius: '5px',
         },
       }}
       component="form"
       autoComplete="off"
       className="input-fields"
-      onSubmit={handleSubmit((model: WishModel) => addMutation.mutate(model))}
+      onSubmit={handleSubmit((model: WishModel) => {
+        addMutation.mutate(model);
+      })}
     >
       <h1 className="title">
         <FormattedMessage id="form_title" />
       </h1>
       <TextField
-        {...register("title")}
+        {...register('title')}
         error={!!errors.title}
-        helperText={errors.title?.message}
-        label={ intl.formatMessage({ id: "wish_title" })}
-        placeholder={ intl.formatMessage({ id: "wish_title_placeholder" })}
+        helperText={
+          errors.title && intl.formatMessage({ id: errors.title.message })
+        }
+        label={intl.formatMessage({ id: 'wish_title' })}
+        placeholder={intl.formatMessage({ id: 'wish_title_placeholder' })}
         margin="dense"
         variant="outlined"
       ></TextField>
 
       <TextField
-        {...register("description")}
+        {...register('description')}
         multiline
         error={!!errors.description}
-        helperText={errors.description?.message}
-        label={ intl.formatMessage({ id: "wish_description" })}
-        placeholder={ intl.formatMessage({ id: "wish_description_placeholder" })} 
+        helperText={
+          errors.description &&
+          intl.formatMessage({ id: errors.description.message })
+        }
+        label={intl.formatMessage({ id: 'wish_description' })}
+        placeholder={intl.formatMessage({ id: 'wish_description_placeholder' })}
         margin="dense"
         variant="outlined"
       />
 
       <TextField
-        {...register("link")}
+        {...register('link')}
         error={!!errors.link}
-        helperText={errors.link?.message}
-        label={ intl.formatMessage({ id: "wish_link" })}
-        placeholder={ intl.formatMessage({ id: "wish_link_placeholder" })}
+        helperText={
+          errors.link && intl.formatMessage({ id: errors.link.message })
+        }
+        label={intl.formatMessage({ id: 'wish_link' })}
+        placeholder={intl.formatMessage({ id: 'wish_link_placeholder' })}
         margin="dense"
         variant="outlined"
       />
 
       <TextField
-        {...register("price")}
+        {...register('price')}
         error={!!errors.price}
-        helperText={errors.price?.message}
-        label={ intl.formatMessage({ id: "wish_price" })}
-        placeholder={ intl.formatMessage({ id: "wish_price_placeholder" })}
+        helperText={
+          errors.price && intl.formatMessage({ id: errors.price.message })
+        }
+        label={intl.formatMessage({ id: 'wish_price' })}
+        placeholder={intl.formatMessage({ id: 'wish_price_placeholder' })}
         margin="dense"
         variant="outlined"
       />
-      <FormControl fullWidth margin="dense">
-        <InputLabel><FormattedMessage id="wish_currency" /></InputLabel>
+
+      <FormControl fullWidth margin="dense" error={!!errors.currency}>
+        <InputLabel>
+          <FormattedMessage id="wish_currency" />
+        </InputLabel>
         <Controller
           render={({ field }) => (
             <Select
               className="input-form__select"
               label="currency"
               {...field}
-              error={!!errors.link}
-              // как вывести текст ошибки?  helperText={errors.link?.message} span
+              error={!!errors.currency}
+              onChange={async (e) => {
+                field.onChange(e);
+                await trigger('price');
+              }}
             >
-              <MenuItem value={"USD"}>$</MenuItem>
-              <MenuItem value={"EUR"}>€</MenuItem>
-              <MenuItem value={"UAH"}>₴</MenuItem>
+              <MenuItem value={'USD'}>$</MenuItem>
+              <MenuItem value={'EUR'}>€</MenuItem>
+              <MenuItem value={'UAH'}>₴</MenuItem>
             </Select>
           )}
           control={control}
           name="currency"
-          defaultValue={""}
+          defaultValue={''}
         />
+        {errors.currency && (
+          <FormHelperText>
+            {errors.currency &&
+              intl.formatMessage({ id: errors.currency.message })}
+          </FormHelperText>
+        )}
       </FormControl>
 
-      <Button className="button-submit" type="submit" variant="contained">
-      <FormattedMessage id="add_btn" />
+      {/* <div>
+        <input
+          {...register("picture")}
+          style={{ display: "none" }}
+          accept="image/*"
+          type="file"
+          id="select-image"
+          name="picture"
+        />
+       
+        <label htmlFor="select-image">
+          <Button variant="contained" fullWidth component="span">
+            Upload Image
+          </Button>
+        </label>
+        <img />
+      </div> */}
+      <Button
+        className="button-submit"
+        type="submit"
+        variant="contained"
+        disabled={!isValid}
+      >
+        <FormattedMessage id="add_btn" />
       </Button>
     </FormControl>
   );

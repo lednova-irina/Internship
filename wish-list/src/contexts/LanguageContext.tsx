@@ -1,4 +1,4 @@
-import { createContext } from "react";
+import { createContext } from 'react';
 
 type LanguageContextType = {
   currentLocale: string;
@@ -6,5 +6,5 @@ type LanguageContextType = {
 };
 
 export const LanguageContext = createContext<LanguageContextType>(
-  {} as LanguageContextType
+  {} as LanguageContextType,
 );
