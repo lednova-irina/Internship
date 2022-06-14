@@ -5,9 +5,12 @@ import LanguageContext from '../contexts/LanguageContext';
 import LOCALES from './locales';
 import {messages} from './messages';
 
-const LanguageProvider: FC<React.PropsWithChildren<unknown>> = ({ children }) => {
+const LanguageProvider: FC<React.PropsWithChildren<unknown>> = ({children}) => {
   const [currentLocale, setCurrentLocale] = useState(navigator.language);
-  const langMemo = useMemo(() => ({currentLocale, setCurrentLocale}), [currentLocale]);
+  const langMemo = useMemo(
+    () => ({currentLocale, setCurrentLocale}),
+    [currentLocale],
+  );
 
   return (
     <LanguageContext.Provider value={langMemo}>
