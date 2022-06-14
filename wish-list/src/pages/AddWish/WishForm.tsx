@@ -16,6 +16,7 @@ import {FormattedMessage, useIntl} from 'react-intl';
 import StoreService from '../../services/StoreService';
 import {WishModel} from '../../models/WishModel';
 import FormSchema from '../../validation/FormValidation';
+import ImageInput from '../../components/ImageInput/ImageInput';
 
 type RouteParams = {
   id?: string;
@@ -36,6 +37,7 @@ const WishForm: FC = () => {
     handleSubmit,
     control,
     trigger,
+    setValue,
     formState: {errors, isValid},
   } = useForm<WishModel>({
     mode: 'all',
@@ -167,23 +169,8 @@ const WishForm: FC = () => {
         )}
       </FormControl>
 
-      {/* <div>
-        <input
-          {...register("picture")}
-          style={{ display: "none" }}
-          accept="image/*"
-          type="file"
-          id="select-image"
-          name="picture"
-        />
+      <ImageInput control={control} name="picture" setValue={setValue} />
 
-        <label htmlFor="select-image">
-          <Button variant="contained" fullWidth component="span">
-            Upload Image
-          </Button>
-        </label>
-        <img />
-      </div> */}
       <Button
         className="button-submit"
         type="submit"
