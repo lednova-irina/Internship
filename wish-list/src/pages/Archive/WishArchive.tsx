@@ -1,4 +1,4 @@
-import { FormattedMessage } from 'react-intl';
+import {FormattedMessage} from 'react-intl';
 import React from 'react';
 
 const WishArchive = () => (

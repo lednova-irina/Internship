@@ -1,20 +1,16 @@
-import React, { FC } from 'react';
-import { FormattedMessage } from 'react-intl';
-import { useQuery } from 'react-query';
+import React, {FC} from 'react';
+import {FormattedMessage} from 'react-intl';
+import {useQuery} from 'react-query';
 import Loader from '../../loader/Loader';
-import { StoreService } from '../../services/StoreService';
+import StoreService from '../../services/StoreService';
 import WishItem from './WishItem';
 
 const WishList: FC = () => {
-  const { isLoading, data } = useQuery(
-    'wishes',
-    () => StoreService.getStore(),
-    {
-      onError: (error: { message: string }) => {
-        alert(error.message);
-      },
+  const {isLoading, data} = useQuery('wishes', () => StoreService.getStore(), {
+    onError: (error: {message: string}) => {
+      alert(error.message);
     },
-  );
+  });
 
   return (
     <div className="wish-list">
@@ -23,7 +19,7 @@ const WishList: FC = () => {
       </h1>
 
       {isLoading ? (
-        <Loader></Loader>
+        <Loader />
       ) : (
         <div className="wish-list__items">
           {data && data.map((wish) => <WishItem key={wish.id} post={wish} />)}

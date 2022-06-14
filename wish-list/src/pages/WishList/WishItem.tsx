@@ -6,12 +6,12 @@ import {
   CardHeader,
   Typography,
 } from '@mui/material';
-import React, { FC } from 'react';
-import { FormattedMessage, FormattedNumber } from 'react-intl';
-import { useMutation, useQueryClient } from 'react-query';
-import { Link } from 'react-router-dom';
-import { WishModel } from '../../models/WishModel';
-import { StoreService } from '../../services/StoreService';
+import React, {FC} from 'react';
+import {FormattedMessage, FormattedNumber} from 'react-intl';
+import {useMutation, useQueryClient} from 'react-query';
+import {Link} from 'react-router-dom';
+import {WishModel} from '../../models/WishModel';
+import StoreService from '../../services/StoreService';
 
 type Props = {
   post: WishModel;
@@ -19,20 +19,19 @@ type Props = {
 
 const WishItem: FC<Props> = (props) => {
   const {
-    post: { id, title, link, price, description, currency },
+    post: {id, title, link, price, description, currency},
   } = props;
 
   const queryClient = useQueryClient();
-
   const deleteMutation = useMutation(
-    (id?: string) => {
-      if (id) {
-        StoreService.deleteWish(id);
+    (idToDelete?: string) => {
+      if (idToDelete) {
+        StoreService.deleteWish(idToDelete);
       }
       return Promise.resolve();
     },
     {
-      onError: (error: { message: string }) => {
+      onError: (error: {message: string}) => {
         alert(error.message);
       },
       onSuccess: () => {
@@ -64,9 +63,10 @@ const WishItem: FC<Props> = (props) => {
           <Typography>
             <FormattedNumber
               value={price}
-              style={`currency`}
+              // eslint-disable-next-line react/style-prop-object
+              style="currency"
               currency={currency}
-            ></FormattedNumber>
+            />
           </Typography>
         )}
       </CardContent>

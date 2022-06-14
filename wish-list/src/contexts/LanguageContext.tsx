@@ -1,10 +1,11 @@
-import { createContext } from 'react';
+import {createContext} from 'react';
 
 type LanguageContextType = {
   currentLocale: string;
   setCurrentLocale: (value: string) => void;
 };
 
-export const LanguageContext = createContext<LanguageContextType>(
+const LanguageContext = createContext<LanguageContextType>(
   {} as LanguageContextType,
 );
+export default LanguageContext;

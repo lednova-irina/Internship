@@ -1,10 +1,11 @@
-import { Button } from '@mui/material';
-import React, { FC } from 'react';
+/* eslint-disable jsx-a11y/label-has-associated-control */
+import {Button} from '@mui/material';
+import React, {FC} from 'react';
 // эта пока заготовка))
 const FileInput: FC = () => (
   <div>
     <input
-      style={{ display: 'none' }}
+      style={{display: 'none'}}
       accept="image/*"
       type="file"
       id="select-image"
