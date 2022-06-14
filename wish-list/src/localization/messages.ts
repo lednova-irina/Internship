@@ -1,4 +1,4 @@
-import {LOCALES} from './locales';
+import LOCALES from './locales';
 
 export type LocalizationKeys = {
   form_title: string;

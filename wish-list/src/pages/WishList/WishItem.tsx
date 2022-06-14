@@ -11,7 +11,7 @@ import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {useMutation, useQueryClient} from 'react-query';
 import {Link} from 'react-router-dom';
 import {WishModel} from '../../models/WishModel';
-import {StoreService} from '../../services/StoreService';
+import StoreService from '../../services/StoreService';
 
 type Props = {
   post: WishModel;
@@ -23,11 +23,10 @@ const WishItem: FC<Props> = (props) => {
   } = props;
 
   const queryClient = useQueryClient();
-
   const deleteMutation = useMutation(
-    (id?: string) => {
-      if (id) {
-        StoreService.deleteWish(id);
+    (idToDelete?: string) => {
+      if (idToDelete) {
+        StoreService.deleteWish(idToDelete);
       }
       return Promise.resolve();
     },
@@ -64,9 +63,10 @@ const WishItem: FC<Props> = (props) => {
           <Typography>
             <FormattedNumber
               value={price}
-              style={`currency`}
+              // eslint-disable-next-line react/style-prop-object
+              style="currency"
               currency={currency}
-            ></FormattedNumber>
+            />
           </Typography>
         )}
       </CardContent>

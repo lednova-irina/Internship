@@ -1,6 +1,5 @@
 import React, {FC, useMemo} from 'react';
 import {Controller, useForm} from 'react-hook-form';
-import {WishModel} from '../../models/WishModel';
 import {
   Button,
   FormControl,
@@ -8,14 +7,15 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  TextField,
 } from '@mui/material';
-import {TextField} from '@mui/material';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {StoreService} from '../../services/StoreService';
 import {useMutation, useQueryClient} from 'react-query';
 import {useNavigate, useParams} from 'react-router-dom';
 import {FormattedMessage, useIntl} from 'react-intl';
-import {FormSchema} from '../../validation/FormValidation';
+import StoreService from '../../services/StoreService';
+import {WishModel} from '../../models/WishModel';
+import FormSchema from '../../validation/FormValidation';
 
 type RouteParams = {
   id?: string;
@@ -45,12 +45,12 @@ const WishForm: FC = () => {
 
   const addMutation = useMutation(
     (data: WishModel) => {
+      const mutation = {...data};
       if (!id) {
-        StoreService.addWish(data);
-        console.log(data.picture);
+        StoreService.addWish(mutation);
       } else {
-        data.id = id;
-        StoreService.editWish(data);
+        mutation.id = id;
+        StoreService.editWish(mutation);
       }
       return Promise.resolve();
     },
@@ -77,8 +77,8 @@ const WishForm: FC = () => {
       component="form"
       autoComplete="off"
       className="input-fields"
-      onSubmit={handleSubmit((model: WishModel) => {
-        addMutation.mutate(model);
+      onSubmit={handleSubmit((mutation: WishModel) => {
+        addMutation.mutate(mutation);
       })}
     >
       <h1 className="title">
@@ -94,7 +94,7 @@ const WishForm: FC = () => {
         placeholder={intl.formatMessage({id: 'wish_title_placeholder'})}
         margin="dense"
         variant="outlined"
-      ></TextField>
+      />
 
       <TextField
         {...register('description')}
@@ -150,14 +150,14 @@ const WishForm: FC = () => {
                 await trigger('price');
               }}
             >
-              <MenuItem value={'USD'}>$</MenuItem>
-              <MenuItem value={'EUR'}>€</MenuItem>
-              <MenuItem value={'UAH'}>₴</MenuItem>
+              <MenuItem value="USD">$</MenuItem>
+              <MenuItem value="EUR">€</MenuItem>
+              <MenuItem value="UAH">₴</MenuItem>
             </Select>
           )}
           control={control}
           name="currency"
-          defaultValue={''}
+          defaultValue=""
         />
         {errors.currency && (
           <FormHelperText>

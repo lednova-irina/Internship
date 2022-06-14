@@ -3,7 +3,7 @@ import {WishModel} from '../models/WishModel';
 
 const storeKey = 'WishesStore';
 
-export const StoreService = {
+const StoreService = {
   getStore: (): Array<WishModel> =>
     localStorage.getItem(storeKey)
       ? JSON.parse(localStorage.getItem(storeKey) as string)
@@ -48,3 +48,5 @@ export const StoreService = {
     StoreService.setStorage([]);
   },
 };
+
+export default StoreService;

@@ -5,6 +5,7 @@ type LanguageContextType = {
   setCurrentLocale: (value: string) => void;
 };
 
-export const LanguageContext = createContext<LanguageContextType>(
+const LanguageContext = createContext<LanguageContextType>(
   {} as LanguageContextType,
 );
+export default LanguageContext;

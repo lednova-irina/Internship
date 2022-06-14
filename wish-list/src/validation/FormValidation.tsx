@@ -1,11 +1,12 @@
 import * as yup from 'yup';
 
-export const FormSchema = yup
+const FormSchema = yup
   .object()
   .shape(
     {
       title: yup
-        .string().max(30, 'validations_max_length')
+        .string()
+        .max(30, 'validations_max_length')
         .required('validations_required_field')
         .matches(/^[а-яА-ЯёЁa-zA-Z0-9\s]+$/i, {
           message: 'validations_only_letters',
@@ -40,3 +41,4 @@ export const FormSchema = yup
     [['price', 'currency']],
   )
   .required();
+export default FormSchema;

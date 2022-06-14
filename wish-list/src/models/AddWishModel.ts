@@ -4,5 +4,5 @@ export interface AddWishModel {
   link?: string;
   price?: number;
   currency?: string;
-  picture?:string;
+  picture?: string;
 }

@@ -3,8 +3,8 @@ import './styles/main.scss';
 import './styles/wishForm.scss';
 import './styles/navbar.scss';
 import './styles/wishList.scss';
-import App from './App';
 import React from 'react';
+import App from './App';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement,

@@ -2,7 +2,7 @@ import React, {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useQuery} from 'react-query';
 import Loader from '../../loader/Loader';
-import {StoreService} from '../../services/StoreService';
+import StoreService from '../../services/StoreService';
 import WishItem from './WishItem';
 
 const WishList: FC = () => {
@@ -19,7 +19,7 @@ const WishList: FC = () => {
       </h1>
 
       {isLoading ? (
-        <Loader></Loader>
+        <Loader />
       ) : (
         <div className="wish-list__items">
           {data && data.map((wish) => <WishItem key={wish.id} post={wish} />)}
