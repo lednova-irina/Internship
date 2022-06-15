@@ -18,7 +18,9 @@ const FormSchema = yup
         .nullable()
         .typeError('validations_only_numbers')
         .transform((value: number, originalValue: number) =>
-          originalValue.toString().trim() === '' ? null : value,
+          originalValue !== null && originalValue.toString().trim() === ''
+            ? null
+            : value,
         )
         .when('currency', {
           is: (currency: string) => !!currency,
@@ -37,6 +39,7 @@ const FormSchema = yup
           is: (price: number) => !!price,
           then: yup.string().required('validations_required_field'),
         }),
+      picture: yup.string().nullable(),
     },
     [['price', 'currency']],
   )

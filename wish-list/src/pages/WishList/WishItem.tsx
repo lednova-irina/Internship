@@ -4,6 +4,7 @@ import {
   CardActions,
   CardContent,
   CardHeader,
+  CardMedia,
   Typography,
 } from '@mui/material';
 import React, {FC} from 'react';
@@ -19,7 +20,7 @@ type Props = {
 
 const WishItem: FC<Props> = (props) => {
   const {
-    post: {id, title, link, price, description, currency},
+    post: {id, title, link, price, description, currency, picture},
   } = props;
 
   const queryClient = useQueryClient();
@@ -43,12 +44,15 @@ const WishItem: FC<Props> = (props) => {
   return (
     <Card className="wish-item">
       <CardHeader className="wish-item__title" title={title} />
-      {/* <CardMedia
+      {picture && (
+        <CardMedia
           component="img"
-          height="140"
-          image="../../UI/images/bmw.jpg"
-          alt="bmw"
-        /> */}
+          // height="150px"
+          className="preview_img"
+          image={picture}
+          alt="preview"
+        />
+      )}
       <CardContent className="wish-item__description">
         <Typography>{description}</Typography>
         <Typography>
