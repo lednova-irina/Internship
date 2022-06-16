@@ -4,7 +4,7 @@ import {WishModel} from '../models/WishModel';
 const storeKey = 'WishesStore';
 
 const StoreService = {
-  getStore: (): Array<WishModel> =>
+  getAllWishes: (): Array<WishModel> =>
     localStorage.getItem(storeKey)
       ? JSON.parse(localStorage.getItem(storeKey) as string)
       : [],
@@ -12,13 +12,13 @@ const StoreService = {
     localStorage.setItem(storeKey, JSON.stringify(store)),
 
   addWish: (value: AddWishModel) => {
-    const store = StoreService.getStore();
+    const store = StoreService.getAllWishes();
     const model = {...value, id: Date.now().toString()};
     store.push(model);
     StoreService.setStorage(store);
   },
   editWish: (wish: WishModel) => {
-    const store = StoreService.getStore();
+    const store = StoreService.getAllWishes();
     const wishItemIndex = store.findIndex((w) => w.id === wish.id);
     if (wishItemIndex >= 0) {
       store[wishItemIndex] = wish;
@@ -34,11 +34,11 @@ const StoreService = {
   //     }
   //   },
   getWish: (id: string) => {
-    const store = StoreService.getStore();
+    const store = StoreService.getAllWishes();
     return store.find((wish) => wish.id === id);
   },
   deleteWish: (id: string) => {
-    const store = StoreService.getStore();
+    const store = StoreService.getAllWishes();
     const result = store.filter((wish) => {
       return wish.id !== id;
     });

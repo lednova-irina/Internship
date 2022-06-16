@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   Button,
@@ -17,6 +17,7 @@ import StoreService from '../../services/StoreService';
 import {WishModel} from '../../models/WishModel';
 import FormSchema from '../../validation/FormValidation';
 import ImageInput from '../../components/ImageInput/ImageInput';
+import APIService from '../../services/APIService';
 
 type RouteParams = {
   id?: string;
@@ -28,33 +29,39 @@ const WishForm: FC = () => {
   const queryClient = useQueryClient();
   const intl = useIntl();
 
-  let model = {} as WishModel;
-  if (id) {
-    model = StoreService.getWish(id) || model;
-  }
   const {
     register,
     handleSubmit,
     control,
     trigger,
     setValue,
+    reset,
     formState: {errors, isValid},
   } = useForm<WishModel>({
     mode: 'all',
     resolver: useMemo(() => yupResolver(FormSchema), []),
-    defaultValues: model,
   });
 
+  useEffect(() => {
+    (async () => {
+      if (id) {
+        const data = await APIService.getWish(id);
+        if (data) {
+          reset(data);
+        }
+      }
+    })();
+  }, [reset]);
+
   const addMutation = useMutation(
-    (data: WishModel) => {
+    async (data: WishModel) => {
       const mutation = {...data};
       if (!id) {
-        StoreService.addWish(mutation);
+        await APIService.addWish(mutation);
       } else {
         mutation.id = id;
         StoreService.editWish(mutation);
       }
-      return Promise.resolve();
     },
     {
       onSuccess: () => {
