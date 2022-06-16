@@ -3,9 +3,9 @@ import React, {FC, useContext} from 'react';
 import {FormattedMessage} from 'react-intl';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import ToggleButton from '@mui/material/ToggleButton';
-import LOCALES from '../localization/locales';
-import LanguageContext from '../contexts/LanguageContext';
-import logo from '../UI/images/logo.svg';
+import LOCALES from '../../localization/locales';
+import LanguageContext from '../../contexts/LanguageContext';
+import logo from '../../UI/images/logo.svg';
 
 const Navbar: FC = () => {
   const {currentLocale, setCurrentLocale} = useContext(LanguageContext);

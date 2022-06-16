@@ -4,7 +4,7 @@ import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import LanguageProvider from './localization/LanguageProvider';
 import WishForm from './pages/AddWish/WishForm';
 import WishArchive from './pages/Archive/WishArchive';
-import Navbar from './components/Navbar';
+import Navbar from './components/navbar/Navbar';
 import NoPage from './pages/NoPage';
 import WishList from './pages/WishList/WishList';
 

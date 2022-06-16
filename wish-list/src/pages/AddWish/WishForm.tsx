@@ -1,4 +1,4 @@
-import React, {FC, useEffect, useMemo} from 'react';
+import React, {FC, useMemo} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   Button,
@@ -10,7 +10,7 @@ import {
   TextField,
 } from '@mui/material';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useMutation, useQueryClient} from 'react-query';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {useNavigate, useParams} from 'react-router-dom';
 import {FormattedMessage, useIntl} from 'react-intl';
 import StoreService from '../../services/StoreService';
@@ -18,6 +18,7 @@ import {WishModel} from '../../models/WishModel';
 import FormSchema from '../../validation/FormValidation';
 import ImageInput from '../../components/ImageInput/ImageInput';
 import APIService from '../../services/APIService';
+import Loader from '../../components/loader/Loader';
 
 type RouteParams = {
   id?: string;
@@ -29,33 +30,36 @@ const WishForm: FC = () => {
   const queryClient = useQueryClient();
   const intl = useIntl();
 
+  const getWishItem = () => {
+    if (id) {
+      return APIService.getWish(id);
+    }
+    return null;
+  };
+
+  const {isLoading, data, error} = useQuery<
+    WishModel | null,
+    {message: string}
+  >('wish', getWishItem);
+  if (isLoading) return <Loader />;
+  if (error) return <p>Ошибка: {error.message}</p>;
+
   const {
     register,
     handleSubmit,
     control,
     trigger,
     setValue,
-    reset,
     formState: {errors, isValid},
   } = useForm<WishModel>({
     mode: 'all',
     resolver: useMemo(() => yupResolver(FormSchema), []),
+    defaultValues: data || {},
   });
 
-  useEffect(() => {
-    (async () => {
-      if (id) {
-        const data = await APIService.getWish(id);
-        if (data) {
-          reset(data);
-        }
-      }
-    })();
-  }, [reset]);
-
   const addMutation = useMutation(
-    async (data: WishModel) => {
-      const mutation = {...data};
+    async (wish: WishModel) => {
+      const mutation = {...wish};
       if (!id) {
         await APIService.addWish(mutation);
       } else {
@@ -68,8 +72,8 @@ const WishForm: FC = () => {
         navigator('/wish-list');
         queryClient.invalidateQueries('wishes');
       },
-      onError: (error: {message: string}) => {
-        alert(error.message);
+      onError: (errorMut: {message: string}) => {
+        alert(errorMut.message);
       },
     },
   );

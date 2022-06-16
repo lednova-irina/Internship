@@ -1,7 +1,7 @@
 import React, {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useQuery} from 'react-query';
-import Loader from '../../loader/Loader';
+import Loader from '../../components/loader/Loader';
 import APIService from '../../services/APIService';
 import WishItem from './WishItem';
 
