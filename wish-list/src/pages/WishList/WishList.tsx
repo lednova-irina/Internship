@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import React, {FC} from 'react';
 import {FormattedMessage} from 'react-intl';
 import {useQuery} from 'react-query';
@@ -6,14 +7,8 @@ import APIService from '../../services/APIService';
 import WishItem from './WishItem';
 
 const WishList: FC = () => {
-  const {isLoading, data} = useQuery(
-    'wishes',
-    () => APIService.getAllWishes(),
-    {
-      onError: (error: {message: string}) => {
-        alert(error.message);
-      },
-    },
+  const {isLoading, data, isSuccess} = useQuery('wishes', () =>
+    APIService.getAllWishes(),
   );
 
   return (
@@ -22,9 +17,9 @@ const WishList: FC = () => {
         <FormattedMessage id="wish_list_title" />
       </h1>
 
-      {isLoading ? (
-        <Loader />
-      ) : (
+      {isLoading && <Loader />}
+
+      {isSuccess && (
         <div className="wish-list__items">
           {data && data.map((wish) => <WishItem key={wish.id} post={wish} />)}
         </div>

@@ -1,4 +1,4 @@
-import React, {FC, useMemo} from 'react';
+import React, {FC, useEffect, useMemo} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
   Button,
@@ -13,7 +13,6 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {useNavigate, useParams} from 'react-router-dom';
 import {FormattedMessage, useIntl} from 'react-intl';
-import StoreService from '../../services/StoreService';
 import {WishModel} from '../../models/WishModel';
 import FormSchema from '../../validation/FormValidation';
 import ImageInput from '../../components/ImageInput/ImageInput';
@@ -30,32 +29,31 @@ const WishForm: FC = () => {
   const queryClient = useQueryClient();
   const intl = useIntl();
 
-  const getWishItem = () => {
-    if (id) {
-      return APIService.getWish(id);
-    }
-    return null;
-  };
-
-  const {isLoading, data, error} = useQuery<
-    WishModel | null,
-    {message: string}
-  >('wish', getWishItem);
-  if (isLoading) return <Loader />;
-  if (error) return <p>Ошибка: {error.message}</p>;
+  const {isLoading, data} = useQuery<WishModel | null, {message: string}>(
+    ['wish', id],
+    () => APIService.getWish(id!),
+    {
+      enabled: !!id,
+    },
+  );
 
   const {
     register,
     handleSubmit,
     control,
     trigger,
+    reset,
     setValue,
     formState: {errors, isValid},
   } = useForm<WishModel>({
     mode: 'all',
     resolver: useMemo(() => yupResolver(FormSchema), []),
-    defaultValues: data || {},
   });
+  useEffect(() => {
+    if (data) {
+      reset(data);
+    }
+  }, [data]);
 
   const addMutation = useMutation(
     async (wish: WishModel) => {
@@ -64,7 +62,7 @@ const WishForm: FC = () => {
         await APIService.addWish(mutation);
       } else {
         mutation.id = id;
-        StoreService.editWish(mutation);
+        await APIService.editWish(mutation);
       }
     },
     {
@@ -72,11 +70,9 @@ const WishForm: FC = () => {
         navigator('/wish-list');
         queryClient.invalidateQueries('wishes');
       },
-      onError: (errorMut: {message: string}) => {
-        alert(errorMut.message);
-      },
     },
   );
+  if (isLoading) return <Loader />;
 
   return (
     <FormControl
