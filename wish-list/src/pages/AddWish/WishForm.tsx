@@ -29,7 +29,7 @@ const WishForm: FC = () => {
   const navigator = useNavigate();
   const queryClient = useQueryClient();
   const intl = useIntl();
-  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar();
 
   const {isLoading, data} = useQuery<WishModel | null, {message: string}>(
     ['wish', id],
@@ -73,12 +73,10 @@ const WishForm: FC = () => {
         queryClient.invalidateQueries('wishes');
       },
       onError: (error: {message: string}) => {
-        const key = enqueueSnackbar(`Something went wrong: ${error.message}`, {
+        enqueueSnackbar(`Something went wrong: ${error.message}`, {
           variant: 'error',
-          persist: true,
           preventDuplicate: true,
         });
-        setTimeout(() => closeSnackbar(key), 6000);
       },
     },
   );

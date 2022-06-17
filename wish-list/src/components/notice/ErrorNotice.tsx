@@ -2,7 +2,7 @@ import React from 'react';
 import {Alert, Snackbar} from '@mui/material';
 import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
-const ErrorNotice = () => {
+const ErrorNotice = (error: string) => {
   const [open, setOpen] = React.useState(true);
 
   const handleClose = (
@@ -17,7 +17,9 @@ const ErrorNotice = () => {
 
   return (
     <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-      <Alert onClose={handleClose} severity="error" sx={{width: '100%'}} />
+      <Alert onClose={handleClose} severity="error" sx={{width: '100%'}}>
+        {error}
+      </Alert>
     </Snackbar>
   );
 };

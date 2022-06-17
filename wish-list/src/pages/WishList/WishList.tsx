@@ -8,18 +8,19 @@ import APIService from '../../services/APIService';
 import WishItem from './WishItem';
 
 const WishList: FC = () => {
-  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
-  const {isLoading, data, error, isError, isSuccess} = useQuery('wishes', () =>
-    APIService.getAllWishes(),
+  const {enqueueSnackbar} = useSnackbar();
+  const {isLoading, data, isSuccess} = useQuery(
+    'wishes',
+    () => APIService.getAllWishes(),
+    {
+      onError: (error: {message: string}) => {
+        enqueueSnackbar(`Something went wrong: ${error.message}`, {
+          variant: 'error',
+          preventDuplicate: true,
+        });
+      },
+    },
   );
-  if (isError) {
-    const key = enqueueSnackbar(`Something went wrong: ${error}`, {
-      variant: 'error',
-      persist: true,
-      preventDuplicate: true,
-    });
-    setTimeout(() => closeSnackbar(key), 6000);
-  }
 
   return (
     <div className="wish-list">

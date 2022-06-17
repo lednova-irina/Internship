@@ -25,7 +25,7 @@ const WishItem: FC<Props> = (props) => {
     post: {id, title, link, price, description, currency, picture},
   } = props;
 
-  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
+  const {enqueueSnackbar} = useSnackbar();
   const queryClient = useQueryClient();
   const deleteMutation = useMutation(
     async (idToDelete?: string) => {
@@ -36,12 +36,10 @@ const WishItem: FC<Props> = (props) => {
     },
     {
       onError: (error: {message: string}) => {
-        const key = enqueueSnackbar(`Something went wrong: ${error.message}`, {
+        enqueueSnackbar(`Something went wrong: ${error.message}`, {
           variant: 'error',
-          persist: true,
           preventDuplicate: true,
         });
-        setTimeout(() => closeSnackbar(key), 6000);
       },
       onSuccess: () => {
         queryClient.invalidateQueries('wishes');
