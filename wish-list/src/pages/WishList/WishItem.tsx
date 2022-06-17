@@ -7,12 +7,14 @@ import {
   CardMedia,
   Typography,
 } from '@mui/material';
+import {useSnackbar} from 'notistack';
 import React, {FC} from 'react';
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {useMutation, useQueryClient} from 'react-query';
 import {Link} from 'react-router-dom';
+import Loader from '../../components/loader/Loader';
 import {WishModel} from '../../models/WishModel';
-import StoreService from '../../services/StoreService';
+import APIService from '../../services/APIService';
 
 type Props = {
   post: WishModel;
@@ -23,17 +25,21 @@ const WishItem: FC<Props> = (props) => {
     post: {id, title, link, price, description, currency, picture},
   } = props;
 
+  const {enqueueSnackbar} = useSnackbar();
   const queryClient = useQueryClient();
   const deleteMutation = useMutation(
-    (idToDelete?: string) => {
+    async (idToDelete?: string) => {
       if (idToDelete) {
-        StoreService.deleteWish(idToDelete);
+        await APIService.deleteWish(idToDelete);
       }
       return Promise.resolve();
     },
     {
       onError: (error: {message: string}) => {
-        alert(error.message);
+        enqueueSnackbar(`Something went wrong: ${error.message}`, {
+          variant: 'error',
+          preventDuplicate: true,
+        });
       },
       onSuccess: () => {
         queryClient.invalidateQueries('wishes');
@@ -85,14 +91,18 @@ const WishItem: FC<Props> = (props) => {
           {' '}
           <FormattedMessage id="wish_item_done_btn" />
         </Button>
-        <Button
-          variant="outlined"
-          size="small"
-          onClick={() => deleteMutation.mutate(id)}
-          className="wish-item__btn"
-        >
-          <FormattedMessage id="wish_item_delete_btn" />
-        </Button>
+        {deleteMutation.isLoading ? (
+          <Loader />
+        ) : (
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={() => deleteMutation.mutate(id)}
+            className="wish-item__btn"
+          >
+            <FormattedMessage id="wish_item_delete_btn" />
+          </Button>
+        )}
       </CardActions>
     </Card>
   );

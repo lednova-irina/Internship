@@ -1,4 +1,5 @@
 export interface AddWishModel {
+  id: string;
   title: string;
   description: string;
   link?: string;
