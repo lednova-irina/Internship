@@ -7,6 +7,7 @@ import {
   CardMedia,
   Typography,
 } from '@mui/material';
+import {useSnackbar} from 'notistack';
 import React, {FC} from 'react';
 import {FormattedMessage, FormattedNumber} from 'react-intl';
 import {useMutation, useQueryClient} from 'react-query';
@@ -24,21 +25,26 @@ const WishItem: FC<Props> = (props) => {
     post: {id, title, link, price, description, currency, picture},
   } = props;
 
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
   const queryClient = useQueryClient();
   const deleteMutation = useMutation(
-    (idToDelete?: string) => {
+    async (idToDelete?: string) => {
       if (idToDelete) {
-        APIService.deleteWish(idToDelete);
+        await APIService.deleteWish(idToDelete);
       }
       return Promise.resolve();
     },
     {
-      onError: (err: {message: string}) => {
-        alert(err.message);
+      onError: (error: {message: string}) => {
+        const key = enqueueSnackbar(`Something went wrong: ${error.message}`, {
+          variant: 'error',
+          persist: true,
+          preventDuplicate: true,
+        });
+        setTimeout(() => closeSnackbar(key), 6000);
       },
       onSuccess: () => {
         queryClient.invalidateQueries('wishes');
-        console.log('done');
       },
     },
   );

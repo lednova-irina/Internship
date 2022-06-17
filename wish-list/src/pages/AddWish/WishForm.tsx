@@ -13,6 +13,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {useNavigate, useParams} from 'react-router-dom';
 import {FormattedMessage, useIntl} from 'react-intl';
+import {useSnackbar} from 'notistack';
 import {WishModel} from '../../models/WishModel';
 import FormSchema from '../../validation/FormValidation';
 import ImageInput from '../../components/ImageInput/ImageInput';
@@ -28,6 +29,7 @@ const WishForm: FC = () => {
   const navigator = useNavigate();
   const queryClient = useQueryClient();
   const intl = useIntl();
+  const {enqueueSnackbar, closeSnackbar} = useSnackbar();
 
   const {isLoading, data} = useQuery<WishModel | null, {message: string}>(
     ['wish', id],
@@ -69,6 +71,14 @@ const WishForm: FC = () => {
       onSuccess: () => {
         navigator('/wish-list');
         queryClient.invalidateQueries('wishes');
+      },
+      onError: (error: {message: string}) => {
+        const key = enqueueSnackbar(`Something went wrong: ${error.message}`, {
+          variant: 'error',
+          persist: true,
+          preventDuplicate: true,
+        });
+        setTimeout(() => closeSnackbar(key), 6000);
       },
     },
   );

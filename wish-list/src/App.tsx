@@ -1,40 +1,32 @@
-import React, {FC, useEffect, useState} from 'react';
+import React, {FC} from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {SnackbarProvider} from 'notistack';
+import {Slide} from '@mui/material';
 import LanguageProvider from './localization/LanguageProvider';
 import WishForm from './pages/AddWish/WishForm';
 import WishArchive from './pages/Archive/WishArchive';
 import Navbar from './components/navbar/Navbar';
 import NoPage from './pages/NoPage';
 import WishList from './pages/WishList/WishList';
-import ErrorService from './services/ErrorService';
-import ErrorNotice from './components/notice/ErrorNotice';
 
 const queryClient = new QueryClient({
   defaultOptions: {queries: {refetchOnWindowFocus: false}},
 });
 
-const ErrorsStack: FC = () => {
-  const [data, setData] = useState<Array<string>>([]);
-  // Как следить за изменениями errors
-  useEffect(() => {
-    setData(ErrorService.getErrors());
-  }, [ErrorService.count()]);
-
-  return (
-    <div>{data && data.map((error) => <ErrorNotice error={error} />)}</div>
-  );
-};
-
 const App: FC = () => {
   return (
-    <QueryClientProvider client={queryClient}>
-      <SnackbarProvider>
+    <SnackbarProvider
+      anchorOrigin={{
+        vertical: 'top',
+        horizontal: 'left',
+      }}
+      TransitionComponent={Slide}
+    >
+      <QueryClientProvider client={queryClient}>
         <LanguageProvider>
           <BrowserRouter>
             <Navbar />
-            <ErrorsStack />
             <Routes>
               <Route path="/" element={<WishList />} />
               <Route path="/wish-list" element={<WishList />} />
@@ -45,8 +37,8 @@ const App: FC = () => {
             </Routes>
           </BrowserRouter>
         </LanguageProvider>
-      </SnackbarProvider>
-    </QueryClientProvider>
+      </QueryClientProvider>
+    </SnackbarProvider>
   );
 };
 export default App;
